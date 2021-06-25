@@ -1,21 +1,27 @@
-<table class="table">
-    <thead>
-    <tr>
-        <th>name</th>
-        <th>description</th>
-    </tr>
-    </thead>
-    <tbody>
+{% if user.is_authenticated %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>name</th>
+            <th>description</th>
+        </tr>
+        </thead>
+        <tbody>
 
-    {% for team in teams %}
-    <tr>
-        <td>
-            <a href="{% url 'project:team_details' team.name %}">{{ team.name }}</a>
 
-        </td>
-        <td>{{ team.description }}</td>
-    </tr>
-    {% endfor %}
+        {% for team in teams %}
+        <tr>
+            <td>
+                <a href="{% url 'project:team_details' team.name %}">{{ team.name }}</a>
 
-    </tbody>
-</table>
+            </td>
+            <td>{{ team.description }}</td>
+        </tr>
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+{% else %}
+    <a href="/login">login</a>
+{% endif %}
