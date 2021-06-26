@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class Team(models.Model):
@@ -8,6 +9,16 @@ class Team(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class TeamMember(models.Model):
+    ROLE_OPTIONS = (
+        ("a", "admin"),
+        ("m", "member")
+    )
+    team_name = models.ForeignKey(Team, on_delete=models.CASCADE)
+    user_username = models.ForeignKey(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=1, choices=ROLE_OPTIONS)
 
 
 class Board(models.Model):

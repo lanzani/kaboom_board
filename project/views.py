@@ -7,6 +7,7 @@ from .models import Team
 
 def index(request):
     teams = Team.objects.all()
+
     return render(request, "project/index.html", {"teams": teams})
 
 

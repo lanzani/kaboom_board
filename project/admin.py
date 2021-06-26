@@ -1,9 +1,13 @@
 from django.contrib import admin
-from .models import Team, Board, Column, Tile
+from .models import Team, TeamMember, Board, Column, Tile
 
 
 class TeamAdmin(admin.ModelAdmin):
     list_display = ("name", "description")
+
+
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = ("team_name", "user_username", "role")
 
 
 class BoardAdmin(admin.ModelAdmin):
@@ -21,6 +25,7 @@ class TileAdmin(admin.ModelAdmin):
 
 # Register your models here.
 admin.site.register(Team, TeamAdmin)
+admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(Board, BoardAdmin)
 admin.site.register(Column, ColumnAdmin)
 admin.site.register(Tile, TileAdmin)
