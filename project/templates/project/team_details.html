@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,6 +54,10 @@
             </div>
         </div>
     </nav>
+
+    <h1>{{ team.name }}</h1>
+    <p>{{ team.description }}</p>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3 flex-column">
@@ -65,16 +68,48 @@
                 <a class="user-list" id="user-list" ><i class="fas fa-user"></i> utente che visualizza</a>
                 </li>
             </div>
+
+
+            {% for board in boards %}
+
             <div class="col-md-8">
                 <div class="card" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title">Board title</h5>
-                        <p class="card-text">Board description</p>
+                        <h5 class="card-title">{{ board.name }}</h5>
+                        <p class="card-text">{{ board.description }}</p>
                         <a href="#" class="btn btn-primary">Go to the board</a>
+
+                        <form method="post" action="" name="delete_board">
+                            {% csrf_token %}
+
+                            <button type="submit" class="btn btn-danger" name="delete_board" value="{{ board.name }}">Elimina Board</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        <div class="col-md-8">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Aggiungi board</h5>
+
+                        <form method="post" action="" name="create_board">
+                            {% csrf_token %}
+                            <p>Nome Board</p>
+                            <input type="text" name="board_name">
+                            <p>Descrizione Board</p>
+                            <input type="text" name="board_description">
+                            <button type="submit" class="btn btn-primary" name="new_board" value="new_board">Crea</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
+
+
     </div>
 </body>
 </html>
