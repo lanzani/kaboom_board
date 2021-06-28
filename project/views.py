@@ -22,6 +22,11 @@ def team_details(request, team_name):
     except Board.DoesNotExist:
         pass
 
+    try:
+        users = TeamMember.objects.filter(team_name=team)
+    except TeamMember.DoesNotExist:
+        pass
+
     if request.method == "POST":
         if request.POST.get("new_board"):
             board_name = request.POST.get("board_name")
@@ -45,7 +50,7 @@ def team_details(request, team_name):
 
         return HttpResponseRedirect("/project/%s" % team.name)
 
-    return render(request, "project/team_details.html", {"team": team, "boards": boards})
+    return render(request, "project/team_details.html", {"team": team, "boards": boards, "users": users})
 
 
 def create_team(request):

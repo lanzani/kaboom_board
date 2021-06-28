@@ -60,6 +60,7 @@
 
     <div class="container-fluid">
         <div class="row">
+        {% for user in users %}
             <div class="col-md-3 flex-column">
                 <li class="user-owner-list-item">
                 <a class="user-list" id="user-list" ><i class="fas fa-user-tie"></i><span class="user-list-text"> owner</span></a>
@@ -68,6 +69,7 @@
                 <a class="user-list" id="user-list" ><i class="fas fa-user"></i> utente che visualizza</a>
                 </li>
             </div>
+        {% endfor %}
 
 
             {% for board in boards %}
