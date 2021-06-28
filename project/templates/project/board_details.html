@@ -1,1 +1,15 @@
-bellaraga
+{% extends "base.html" %}
+
+{% block content %}
+    {% for column in columns %}
+        <h2>{{ column.title }}</h2>
+
+        {% for tile in tiles %}
+            {% if tile.column_title == column %}
+                <p>{{ tile.title }}</p>
+            {% endif %}
+        {% endfor %}
+
+    {% endfor %}
+
+{% endblock %}
