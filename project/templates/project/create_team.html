@@ -1,0 +1,8 @@
+<h1>Crea Team</h1>
+
+<form method="post" action="{% url 'project:create_team' %}">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" name="save">Crea Team</button>
+
+</form>
