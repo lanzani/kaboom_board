@@ -1,8 +1,14 @@
-<h1>Crea Team</h1>
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
 
-<form method="post" action="{% url 'project:create_team' %}">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit" name="save">Crea Team</button>
+{% block content %}
+    <h1>Crea Team</h1>
 
-</form>
+    <form method="post" action="{% url 'project:create_team' %}">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary" name="save">Crea Team</button>
+
+    </form>
+
+{% endblock %}

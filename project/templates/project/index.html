@@ -1,25 +1,26 @@
-{% if user.is_authenticated %}
+{% extends "base.html" %}
+
+{% block content %}
+
     <table class="table">
         <thead>
         <tr>
             <th>name</th>
-            <th>description</th>
         </tr>
         </thead>
         <tbody>
 
 
-        {% for team in teams %}
+        {% for user_team in user_teams %}
         <tr>
             <td>
-                <a href="{% url 'project:team_details' team.name %}">{{ team.name }}</a>
+                <a href="{% url 'project:team_details' user_team.team_name %}">{{ user_team.team_name }}</a>
 
             </td>
-            <td>{{ team.description }}</td>
         </tr>
         {% endfor %}
+
         </tbody>
     </table>
-{% else %}
-    <a href="/login">login</a>
-{% endif %}
+    <a class="btn btn-primary" href="{% url 'project:create_team' %}">Crea nuovo team</a>
+{% endblock %}
