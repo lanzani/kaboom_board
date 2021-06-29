@@ -1,7 +1,8 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from .models import Team, TeamMember, Board, Column, Tile
-from .forms import CreateTeam
+from django.contrib.auth.models import User
+from .forms import CreateTeam, AddUserToTeam
 from .crud_utils import *
 
 
@@ -12,9 +13,12 @@ def index(request):
         return HttpResponseRedirect("/login")
 
     user_teams = TeamMember.objects.filter(user_username=request.user)
-    form = CreateTeam(request.POST)
+
+    teams = [Team.objects.get(pk=team.team_name) for team in user_teams]
+    form = CreateTeam()
 
     if request.method == "POST":
+        form = CreateTeam(request.POST)
         if not form.is_valid():
             return HttpResponseRedirect("/project/")
 
@@ -37,10 +41,12 @@ def index(request):
 
         return HttpResponseRedirect("/project/")
 
-    return render(request, "project/index.html", {"user_teams": user_teams, "form": form})
+    return render(request, "project/index.html", {"teams": teams, "form": form})
 
 
 def team_details(request, team_name):
+    form = AddUserToTeam()
+
     # Qui è la pagina del team, vengono mostrati membri e boards
 
     # team = get_object_or_404(Team, pk=team_name)
@@ -90,10 +96,35 @@ def team_details(request, team_name):
         elif request.POST.get("delete_team"):
             Team.objects.filter(name=team.name).delete()
 
+        elif request.POST.get("add_user_to_team"):
+            form = AddUserToTeam(request.POST)
+
+            if not form.is_valid():
+                return HttpResponseRedirect("/project/%s" % team.name)
+
+            username = form.cleaned_data["username"]
+            role = form.cleaned_data["role"]
+
+            try:
+                u = User.objects.get(username=username)
+            except User.DoesNotExist:
+                print("l'utente non esiste")
+                return HttpResponseRedirect("/project/%s" % team.name)
+
+            user_already_exist = (
+                    len(TeamMember.objects.filter(team_name=team, user_username=u)) > 0
+            )
+
+            if user_already_exist:
+                print("l'utente è già nel team")
+            else:
+                tm = TeamMember(team_name=team, user_username=u, role=role)
+                tm.save()
+
         return HttpResponseRedirect("/project/%s" % team.name)
 
     return render(request, "project/team_details.html",
-                  {"team": team, "boards": boards, "members": members, "user_admin": user_admin})
+                  {"team": team, "boards": boards, "members": members, "user_admin": user_admin, "form": form})
 
 
 def board_details(request, team_name, board_name):

@@ -2,33 +2,38 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+    <h1>I tuoi team</h1>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Teams</th>
-        </tr>
-        </thead>
-        <tbody>
+        {% for team in teams %}
 
+          <div class="col">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">{{ team.name }}</h5>
+                <p class="card-text">{{ team.description }}</p>
+                <a href="{% url 'project:team_details' team.name %}" class="btn btn-primary">Vai al Team</a>
+              </div>
+            </div>
+          </div>
 
-        {% for user_team in user_teams %}
-        <tr>
-            <td>
-                <a href="{% url 'project:team_details' user_team.team_name %}">{{ user_team.team_name }}</a>
-            </td>
-        </tr>
         {% endfor %}
 
-        </tbody>
-    </table>
+        <div class="col">
+            <a href="" data-bs-toggle="modal" data-bs-target="#createTeamModal" style="color:#fff; text-decoration: none">
+            <div class="card bg-success h-100">
+              <div class="card-body d-flex align-items-center justify-content-center">
+                  Crea nuovo team
+              </div>
+            </div>
+            </a>
+        </div>
 
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTeamModal">
-      Crea nuovo team
-    </button>
+    </div>
 
-    <!-- Modal -->
+
+
+    <!-- create team Modal -->
     <div class="modal fade" id="createTeamModal" tabindex="-1" aria-labelledby="createTeamModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -42,11 +47,10 @@
                     {% csrf_token %}
                     {{ form|crispy }}
 
-
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" name="save">Crea Team</button>
+                <button type="submit" class="btn btn-success" name="save">Crea Team</button>
               </div>
             </form>
         </div>

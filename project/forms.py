@@ -17,3 +17,13 @@ class CreateTeam(forms.Form):
 #     content_type = forms.CharField(label="Tipo contenuto", max_length=1, choices=CONTENT_OPTIONS)
 #     content = forms.CharField(label="Contenuto", max_length=255)
 #     multimedia_obj = forms.CharField(label="Immagine", max_length=45)
+
+class AddUserToTeam(forms.Form):
+    ROLE_OPTIONS = (
+        ("a", "admin"),
+        ("m", "member")
+    )
+    username = forms.CharField(label="Username", max_length=30)
+    role = forms.ChoiceField(label='Ruolo', choices=ROLE_OPTIONS, widget=forms.RadioSelect)
+
+

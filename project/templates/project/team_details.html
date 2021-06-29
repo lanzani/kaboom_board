@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
     {% block content %}
 
@@ -44,13 +45,18 @@
                 <h5 class="modal-title" id="exampleModalLabel">Aggiungi utente</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <div class="modal-body">
-                Forse è meglio farlo in un'altra pagina?
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Aggiungi utente</button>
-              </div>
+                <form method="post" action="" name="add_user_to_team">
+                  <div class="modal-body">
+
+                    {% csrf_token %}
+                    {{ form|crispy }}
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" name="add_user_to_team" value="{{ team.name }}" >Aggiungi</button>
+                  </div>
+                </form>
             </div>
           </div>
         </div>
