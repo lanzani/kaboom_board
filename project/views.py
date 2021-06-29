@@ -121,6 +121,14 @@ def team_details(request, team_name):
                 tm = TeamMember(team_name=team, user_username=u, role=role)
                 tm.save()
 
+        elif request.POST.get("remove_user_from_team"):
+            # TODO gestire opzioni varie (refactorare codice e pagina, un utente non admin non può ne aggiungere ne rimuovere partecipanti)
+            username = request.POST.get("remove_user_from_team")
+            user = User.objects.get(username=username)
+
+            if user != request.user:
+                TeamMember.objects.filter(user_username=user, team_name=team).delete()
+
         return HttpResponseRedirect("/project/%s" % team.name)
 
     return render(request, "project/team_details.html",

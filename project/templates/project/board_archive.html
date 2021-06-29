@@ -12,7 +12,9 @@
 
         <form method="post" action="" name="change_column_status_in_progress">
             {% csrf_token %}
-            <button type="submit" class="btn btn-info" name="change_column_status_in_progress" value="{{ column.id }}" >Ripristina</button>
+            <button type="submit" class="btn btn-info" name="change_column_status_in_progress" value="{{ column.id }}">
+                Ripristina
+            </button>
         </form>
 
 
