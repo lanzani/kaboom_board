@@ -1,16 +1,19 @@
 {% extends "base.html" %}
 {% block style %}
-<link rel="stylesheet" href="profileStyle.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'project/css/profileStyle.css' %}">
 {% endblock %}
 {% block content %}
-    <h1>{{ user.username }}</h1>
-<div class="centro">
-    <div class="d-flex align-items-center"><i class="fas fa-user fa-5x" id="icon-utente"></i><h1 class="nome-user"> Username</h1></div>
-    <div><a>Nome: <a class="nome-utente"> il suo nome</a></a><br>
-         <a>cognome: <a class="cognome-utente"> il suo cognome</a></a><br>
-         <a>email: <a class="mail-utente"> la sua mail</a></a>
-    </div>
-    <button type="button" class="btn btn-primary"data-bs-toggle="modal" data-bs-target="#modifica-user-modal" >Modifica user</button>
+    <div class="centro">
+        <div class="d-flex align-items-center"><i class="fas fa-user fa-5x" id="icon-utente"></i>
+            <h1 class="nome-user"> {{ user.username }}</h1></div>
+        <div><a>Nome: <a class="nome-utente"> il suo nome</a></a><br>
+            <a>cognome: <a class="cognome-utente"> il suo cognome</a></a><br>
+            <a>email: <a class="mail-utente"> la sua mail</a></a>
+        </div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifica-user-modal">
+            Modifica user
+        </button>
 
     </div>
 
@@ -18,24 +21,24 @@
 
     <div class="modal" tabindex="-1" id="modifica-user-modal">
         <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Modifica il nome della board</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <a>inserisci il nuovo nome </a>
-            <input type="text" placeholder="Inserisci qui il nome" name="nomeBoard" > <br>
-            <a>inserisci il nuovo cognome </a>
-            <input type="text" placeholder="Inserisci qui il cognome" name="nomeBoard" > <br>
-            <a>inserisci la nuova mail </a>
-            <input type="text" placeholder="Inserisci qui la mail" name="nomeBoard" >
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-            <button type="button" class="btn btn-primary">Salva modifiche</button>
-          </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifica il nome della board</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <a>inserisci il nuovo nome </a>
+                    <input type="text" placeholder="Inserisci qui il nome" name="nomeBoard"> <br>
+                    <a>inserisci il nuovo cognome </a>
+                    <input type="text" placeholder="Inserisci qui il cognome" name="nomeBoard"> <br>
+                    <a>inserisci la nuova mail </a>
+                    <input type="text" placeholder="Inserisci qui la mail" name="nomeBoard">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-primary">Salva modifiche</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 {% endblock %}

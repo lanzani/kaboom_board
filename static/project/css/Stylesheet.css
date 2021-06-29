@@ -1,21 +1,4 @@
-Body {
-  font-family: Sans-serif;
-  font size: 14;
-  width: 100%;
-  background-color: #E0E0E0;
-}
 
-h1 {
-  position: absolute;
-  left: 16px;
-  top: 16px;
-}
-
-menu {
-  position: absolute;
-  right: 16px;
-  top: 16px;
-}
 
 menu.kanban .viewlist,
 menu.list .viewkanban {
@@ -52,7 +35,7 @@ ol.list .text {
 }
 
 ol.list h3,
-ol.list .actions,
+ol.list,
 ol.list label {
   float: left;
   width: 30%;
@@ -80,16 +63,6 @@ ol.list.progress {
   border-left: 2px solid #29B6F6;
 }
 
-H2,
-h1,
-button {
-  margin-left: 5px;
-  font-family: 'Arbutus Slab', serif;
-}
-
-h2 {
-  color: #607D8B;
-}
 
 h2 .material-icons {
   color: #B0BEC5;
@@ -107,52 +80,13 @@ h2 .material-icons {
   padding: 5px 16px;
 }
 
-button>.material-icons {
-  line-height: 0.2;
-  position:relative;
-  top:7px;
-}
 
-.dd-item:hover,
-button:hover {
-  color: #00838F;
-  will-change: box-shadow;
-  transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
-  box-shadow: 0 5px 6px 0 rgba(0, 0, 0, .14), 0 3px 1px -6px rgba(0, 0, 0, .2), 2px 5px 3px 0 rgba(0, 0, 0, .12);
-}
 
-button.addbutt {
-  background-color: #EEEEEE;
-  color: #607D8B;
-  width: 100%;
-}
 
 .list > button.addbutt {
   max-width: 330px;
 }
 
-button:active, button:down, button:focus {box-shadow: 0 0 0 0, 0 0 0 0 rgba(0, 0, 0, .2), 0 0 0 0 rgba(0, 0, 0, .12);color:#00838F;}
-button {
-  align-items: center;
-  background-color: #EEEEEE;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  color: #607D8B;
-  position: relative;
-  margin: 0;
-  min-width: 44px;
-  padding: 10px 16px;
-  display: inline-block;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1;
-  overflow: hidden;
-  outline: none;
-  cursor: pointer;
-  text-decoration: none;
-    }
 
 ol.kanban.To-do {
   border-top: 5px solid #FFB300;
@@ -181,7 +115,6 @@ ol.kanban {
   display: block;
   position: relative;
   list-style: none;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   min-height: 10px;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -213,19 +146,8 @@ ol.kanban {
   margin: 0;
 }
 
-.text {
-  color: grey;
-  border-top: 1px solid font-size: 1rem;
-  font-weight: 400;
-  line-height: 18px;
-  overflow: hidden;
-  padding: 16px;
-  width: 90%;
-}
-
 .actions {
   border-top: 1px solid rgba(0, 0, 0, .1);
-  font-size: 8px;
   line-height: normal;
   width: 100%;
   color: #B0BEC5;

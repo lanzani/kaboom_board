@@ -1,13 +1,20 @@
 {% extends "base.html" %}
+
 {% block style %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'project/css/homeStyle.css' %}">
 {% endblock %}
+
 {% block content %}
     <div class="centro"><h1>Kaboom board!</h1> <br>
         <a>Implementazione Kanban board per il progetto di laborarotio del corso sitemi distribuiti!</a><br>
-         <a class="btn btn-outline-primary" href="/login">Login</a>
-        <a class="btn btn-primary" href="/user_register">Sign up</a>
+
+        {% if user.is_authenticated %}
+            <a class="btn btn-outline-primary" href="/project">Dashboard</a>
+        {% else %}
+            <a class="btn btn-outline-primary" href="/login">Login</a>
+            <a class="btn btn-primary" href="/user_register">Sign up</a>
+        {% endif %}
     </div>
 {% endblock %}
 

@@ -9,6 +9,7 @@ from .crud_utils import *
 # Create your views here.
 
 def index(request):
+    # TODO creare colore random di backround quando si crea un team
     if not request.user.is_authenticated:
         return HttpResponseRedirect("/login")
 
