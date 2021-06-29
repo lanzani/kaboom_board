@@ -1,3 +1,5 @@
+from datetime import date
+
 from .models import Team, TeamMember, Board, Column, Tile
 
 # TODO Team
@@ -36,6 +38,13 @@ def change_column_status(column_id, status):
 
 
 # Tile
+
+def create_tile(title, content_type, content, multimedia_obj, author, column, board, team):
+
+    t = Tile(title=title, content_type=content_type, content=content, multimedia_obj=multimedia_obj,
+             creation_date=date.today(), author=author, column_title=column, team_name=team, board_name=board)
+
+    t.save()
 
 
 def delete_tile(tile_id):

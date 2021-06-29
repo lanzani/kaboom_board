@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
     <table class="table">
         <thead>
         <tr>
-            <th>name</th>
+            <th>Teams</th>
         </tr>
         </thead>
         <tbody>
@@ -21,5 +22,35 @@
 
         </tbody>
     </table>
-    <a class="btn btn-primary" href="{% url 'project:create_team' %}">Crea nuovo team</a>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTeamModal">
+      Crea nuovo team
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="createTeamModal" tabindex="-1" aria-labelledby="createTeamModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createTeamModalLabel">Crea Team</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+            <form method="post" action="">
+              <div class="modal-body">
+
+                    {% csrf_token %}
+                    {{ form|crispy }}
+
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" name="save">Crea Team</button>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+
 {% endblock %}

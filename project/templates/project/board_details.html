@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+    <a class="btn btn-primary" href="{% url 'project:view_board_archive' team.name board.name %}">Vai all'archivio</a>
+
+
     {% for column in columns %}
 
 
@@ -17,6 +21,7 @@
 
         <form method="post" action="" name="add_new_tile">
             {% csrf_token %}
+            <input type="text" name="tile_title">
             <button type="submit" class="btn btn-info" name="add_new_tile" value="{{ column.id }}" >Nuovo Tile</button>
         </form>
 
