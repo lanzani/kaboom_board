@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <a class="btn btn-primary" href="{% url 'project:view_board_archive' team.name board.name %}">Vai all'archivio</a>
+
+
+    {% for column in columns %}
+
+
+        <h2>{{ column.title }}</h2>
+        <form method="post" action="" name="delete_column">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" name="delete_column" value="{{ column.id }}" >Elimina Colonna</button>
+        </form>
+
+        <form method="post" action="" name="change_column_status_archived">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-info" name="change_column_status_archived" value="{{ column.id }}" >Archivia Colonna</button>
+        </form>
+
+        <form method="post" action="" name="add_new_tile">
+            {% csrf_token %}
+            <input type="text" name="tile_title">
+            <button type="submit" class="btn btn-info" name="add_new_tile" value="{{ column.id }}" >Nuovo Tile</button>
+        </form>
+
+
+
+
+        {% for tile in tiles %}
+            {% if tile.column_title == column %}
+
+
+                <p>{{ tile.title }}</p>
+                <form method="post" action="" name="delete_tile">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger" name="delete_tile" value="{{ tile.id }}" >Elimina tile</button>
+                </form>
+
+
+            {% endif %}
+        {% endfor %}
+
+    {% endfor %}
+
+
+
+
+    <form method="post" action="" name="create_column">
+        {% csrf_token %}
+        <p>Titolo colonna</p>
+        <input type="text" name="column_title">
+        <button type="submit" class="btn btn-primary" name="create_column" value="create_column" >Crea</button>
+    </form>
+
+
+{% endblock %}

@@ -4,6 +4,7 @@ from .forms import UserRegisterForm
 
 # Create your views here.
 def register(response):
+    # todo controllare se esiste già l'utente
     if response.method == "POST":
         form = UserRegisterForm(response.POST)
         if form.is_valid():

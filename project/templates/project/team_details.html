@@ -1,80 +1,119 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team page</title>
+    {% block content %}
 
-    <link rel="stylesheet" href="Stylesheet.css">
+    <h1>{{ team.name }}</h1>
+    <p>{{ team.description }}</p>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <form method="post" action="" name="delete_team">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger btn-sm" name="delete_team" value="delete_team">Delete Team</button>
+    </form>
 
-    <!--Font Awsome-->
-    <script src="https://kit.fontawesome.com/ae7b598d47.js" crossorigin="anonymous"></script>
-
-</head>
-<body>
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-
-            <a class="nav-item nav-link" ><i class="navbar-brand far fa-clipboard"></i><span class="navbar-text"> Kaboom Board</span></a>
-
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                  </button>
-                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                      <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#Home">Home</a>
-                      </li>
-                      <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          Teams
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <li><a class="dropdown-item" href="#">Team-1</a></li>
-                          <li><a class="dropdown-item" href="#">Team-2</a></li>
-                          <li><hr class="dropdown-divider"></li>
-                          <li><a class="dropdown-item" href="#">Crea un Team</a></li>
-                        </ul>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </nav>
-            </div>
-        </div>
-    </nav>
     <div class="container-fluid">
         <div class="row">
+
+        {% for member in members %}
             <div class="col-md-3 flex-column">
+            {% if member.role == "a" %}
+
                 <li class="user-owner-list-item">
-                <a class="user-list" id="user-list" ><i class="fas fa-user-tie"></i><span class="user-list-text"> owner</span></a>
+                    <a class="user-list" id="user-list" ><i class="fas fa-user-tie"></i><span class="user-list-text"> (owner) - {{ member.user_username }}</span></a>
                 </li>
+            {% else %}
                 <li class="user-list-item">
-                <a class="user-list" id="user-list" ><i class="fas fa-user"></i> utente che visualizza</a>
+                    <a class="user-list" id="user-list" ><i class="fas fa-user"></i> {{ member.user_username }}</a>
                 </li>
+
+            {% endif %}
             </div>
+
+        {% endfor %}
+
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          Aggiungi utente
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Aggiungi utente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+                <form method="post" action="" name="add_user_to_team">
+                  <div class="modal-body">
+
+                    {% csrf_token %}
+                    {{ form|crispy }}
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" name="add_user_to_team" value="{{ team.name }}" >Aggiungi</button>
+                  </div>
+                </form>
+            </div>
+          </div>
+        </div>
+
+
+        {% for board in boards %}
+
             <div class="col-md-8">
                 <div class="card" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title">Board title</h5>
-                        <p class="card-text">Board description</p>
-                        <a href="#" class="btn btn-primary">Go to the board</a>
+                        <h5 class="card-title">{{ board.name }}</h5>
+                        <p class="card-text">{{ board.description }}</p>
+                        <a href="{% url 'project:board_details' team.name board.name %}" class="btn btn-primary">Go to the board</a>
+
+                        <form method="post" action="" name="delete_board">
+                            {% csrf_token %}
+
+                            {% if user_admin.role != "a" %}
+                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Devi essere un admin">
+                                    <button type="button" class="btn btn-danger" disabled>Elimina Board</button>
+                                </span>
+                            {% else %}
+                                <button type="submit" class="btn btn-danger" name="delete_board" value="{{ board.name }}" >Elimina Board</button>
+                            {% endif %}
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+
+        <div class="col-md-8">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Aggiungi board</h5>
+
+                        <form method="post" action="" name="create_board">
+                            {% csrf_token %}
+                            <p>Nome Board</p>
+                            <input type="text" name="board_name" required>
+                            <p>Descrizione Board</p>
+                            <input type="text" name="board_description">
+                            {% if user_admin.role != "a" %}
+                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Devi essere un admin">
+                                    <button type="submit" class="btn btn-primary" disabled>Crea</button>
+                                </span>
+                            {% else %}
+                                <button type="submit" class="btn btn-primary" name="new_board" value="new_board">Crea</button>
+                            {% endif %}
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
+
+
     </div>
-</body>
-</html>
+
+{% endblock %}

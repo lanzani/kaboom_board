@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <a class="btn btn-primary" href="{% url 'project:board_details' team.name board.name %}">Torna alla board</a>
+
+
+    {% for column in columns %}
+
+
+        <h2>{{ column.title }}</h2>
+
+        <form method="post" action="" name="change_column_status_in_progress">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-info" name="change_column_status_in_progress" value="{{ column.id }}" >Ripristina</button>
+        </form>
+
+
+
+
+
+        {% for tile in tiles %}
+            {% if tile.column_title == column %}
+
+
+                <p>{{ tile.title }}</p>
+
+
+            {% endif %}
+        {% endfor %}
+
+    {% endfor %}
+
+{% endblock %}

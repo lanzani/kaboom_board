@@ -26,6 +26,9 @@ class Board(models.Model):
     description = models.CharField(max_length=255)
     team_name = models.ForeignKey(Team, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.name
+
 
 class Column(models.Model):
     STATUS_OPTIONS = (
@@ -38,6 +41,9 @@ class Column(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_OPTIONS)
     team_name = models.ForeignKey(Team, on_delete=models.CASCADE)
     board_name = models.ForeignKey(Board, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
 
 
 class Tile(models.Model):
@@ -52,6 +58,10 @@ class Tile(models.Model):
     content = models.TextField()
     multimedia_obj = models.CharField(max_length=45)
 
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     column_title = models.ForeignKey(Column, on_delete=models.CASCADE)
     team_name = models.ForeignKey(Team, on_delete=models.CASCADE)
     board_name = models.ForeignKey(Board, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
