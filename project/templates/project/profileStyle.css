@@ -1,0 +1,61 @@
+#icon-utente {
+
+  color: blue;
+}
+.nome-user{
+
+  padding-left: 30px;
+}
+.btn {
+
+  min-width: 100px;
+  margin-top: 15px;
+}
+.centro {
+  position: fixed;
+  top:  50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+}
+
+
+
+.btn {
+
+  min-width: 100px;
+  margin-top: 15px;
+}
+.nome-utente{
+
+  text-decoration: none;
+  color: black;
+}
+
+.cognome-utente{
+
+  text-decoration: none;
+  color: black;
+}
+
+.mail-utente{
+
+  text-decoration: none;
+  color: black;
+}
+
+.mail-utente:hover {
+
+  color: black;
+}
+
+
+.cognome-utente:hover {
+
+  color: black;
+}
+
+.nome-utente:hover {
+
+  color: black;
+}
