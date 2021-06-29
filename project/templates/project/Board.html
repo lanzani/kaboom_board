@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Board</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+
+  <link rel="stylesheet" href="Stylesheet.css">
+
+
+  <!--Font Awsome-->
+  <script src="https://kit.fontawesome.com/ae7b598d47.js" crossorigin="anonymous"></script>
+
+  <!-- jquery-->
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body>
+  <script>
+    document.querySelector('#p1').addEventListener('mdl-componentupgraded', function() {
+      this.MaterialProgress.setProgress(44);
+    });
+  </script><div class="kanban__title">
+  <!-- Simple MDL Progress Bar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+
+        <a class="nav-item nav-link" ><i class="navbar-brand far fa-clipboard"></i><span class="navbar-text"> Kaboom Board</span></a>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#Home">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Profile</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </div>
+    </div>
+</nav>
+
+    <div class="container-fluid">
+        <a class="float-left-child" id="board-name"> Board Name </a>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifica-nome-modal">modifica board</button>
+        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#Aggiungi-colonna-modal"><i class="fas fa-plus" id="btn-add"></i> Aggiungi colonna</button>
+    </div>
+    <hr class="solid">
+        <a id="board-description">Una veloce descrizione della boarda di prova dopo verra modificata</a><br>
+
+
+    <!-- form modifica nome board-->
+
+    <div class="modal" tabindex="-1" id="modifica-nome-modal">
+    <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modifica il nome della board</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <a>inserisci il nuovo nome </a>
+        <input type="text" placeholder="Inserisci qui il nome" name="nomeBoard" > <br>
+         <a>inserisci la nuova descrizione </a>
+        <input type="text" placeholder="Inserisci qui la descrizione" name="nomeBoard" >
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-primary">Salva modifiche</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Form aggiunta delle colonne-->
+
+<div class="modal" tabindex="-1" id="Aggiungi-colonna-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Aggiungi una colonna</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <a>Inserisci il nome della colonna </a>
+        <input type="text" placeholder="Inserisci qui il nome" name="nomeColonna" required><br>
+        <a>Scegli un colore per la colonna</a>
+        <div class="custom-control custom-radio" required>
+    <input type="radio" class="custom-control-input" id="customRadio" name="example1" value="customEx">
+    <label class="custom-control-label" for="customRadio"><i class="fas fa-square greenbtn"></i></label><br>
+    <input type="radio" class="custom-control-input" id="customRadio" name="example1" value="customEx">
+    <label class="custom-control-label" for="customRadio"><i class="fas fa-square redbtn"></i></i></label><br>
+    <input type="radio" class="custom-control-input" id="customRadio" name="example1" value="customEx">
+    <label class="custom-control-label" for="customRadio"><i class="fas fa-square bluebtn"></i></label><br>
+    <input type="radio" class="custom-control-input" id="customRadio" name="example1" value="customEx">
+    <label class="custom-control-label" for="customRadio"><i class="fas fa-square yellowbtn"></i></label><br>
+    <input type="radio" class="custom-control-input" id="customRadio" name="example1" value="customEx">
+    <label class="custom-control-label" for="customRadio"><i class="fas fa-square purplebtn"></i></label><br>
+  </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-primary">Salva modifiche</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- form modifica colonna-->
+
+<div class="modal" tabindex="-1" id="modifica-colonna-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modifica la colonna</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <a>Inserisci il nuovo nome della colonna </a>
+        <input type="text" placeholder="Inserisci qui il nome" name="nomeColonna" required><br>
+        <a>Scegli un nuovo colore per la colonna</a>
+        <div class="custom-control custom-radio" required>
+    <input type="radio" class="custom-control-input" id="customRadio" name="example1" value="customEx">
+    <label class="custom-control-label" for="customRadio"><i class="fas fa-square greenbtn"></i></label><br>
+    <input type="radio" class="custom-control-input" id="customRadio" name="example1" value="customEx">
+    <label class="custom-control-label" for="customRadio"><i class="fas fa-square redbtn"></i></i></label><br>
+    <input type="radio" class="custom-control-input" id="customRadio" name="example1" value="customEx">
+    <label class="custom-control-label" for="customRadio"><i class="fas fa-square bluebtn"></i></label><br>
+    <input type="radio" class="custom-control-input" id="customRadio" name="example1" value="customEx">
+    <label class="custom-control-label" for="customRadio"><i class="fas fa-square yellowbtn"></i></label><br>
+    <input type="radio" class="custom-control-input" id="customRadio" name="example1" value="customEx">
+    <label class="custom-control-label" for="customRadio"><i class="fas fa-square purplebtn"></i></label><br>
+  </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-primary">Salva Modifiche</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- contenuto text tile -->
+
+ <div class="modal" tabindex="-1" id="text-type-tile">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Titolo tile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <a>Lorem ipsum</a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- contenuto image tile -->
+
+ <div class="modal" tabindex="-1" id="image-type-tile">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Titolo tile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img src="img_girl.jpg">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- form modifica text tile -->
+
+ <div class="modal" tabindex="-1" id="modifica-nometile-modal">
+    <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modifica la tile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <a>inserisci il nome da modificare </a>
+        <input type="text" placeholder="Inserisci qui il nuovo nome" name="nomeBoard" > <br>
+         <a>inserisci contenuto da modificare</a>
+        <input type="text" placeholder="Inserisci qui il nuovo nome" name="nomeBoard" >
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-primary">Salva modifiche</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- form modifica image tile -->
+
+<div class="modal" tabindex="-1" id="modifica-imagetile-modal">
+    <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modifica tile </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <a>inserisci il nome da modificare </a>
+        <input type="text" placeholder="Inserisci qui il nuovo nome" name="nomeBoard" > <br>
+         <button type="button" class="btn btn-primary">scegli immagine</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-primary">Salva modifiche</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+    <!-- Colonna -->
+  <ol class="kanban To-do">
+    <div class="kanban__title">
+      <h2 >To do</h2>
+
+      <a class="button-column button-archivia"><i class="fas fa-folder graybtn"></i></a>
+      <a class="button-column button-delete"><i class="fas fa-trash graybtn"></a></i>
+      <a class="button-column button-edit" data-bs-toggle="modal" data-bs-target="#modifica-colonna-modal"><i class="fas fa-pencil-alt graybtn"></i></a></div><br>
+   <li class="dd-item text" data-id="1" data-bs-toggle="modal" data-bs-target="#text-type-tile"  style="background-color:palegreen;">
+      <h3 class="title dd-handle" >Tile title</h3>
+      <a class="button-column button-delete"><i class="fas fa-trash graybtn"></a></i>
+      <a class="button-column button-edit" data-bs-toggle="modal" data-bs-target="#modifica-nometile-modal"><i class="fas fa-pencil-alt graybtn"></i></a></div><br>
+        <div class="actions">
+        <a>fare click sul tile per visualizzarla nel dettaglio</a> <div>
+
+    </li>
+    <li class="dd-item image" data-id="1" data-bs-toggle="modal" data-bs-target="#image-type-tile"  style="background-color:powderblue;">
+      <h3 class="title dd-handle" >Tile title</h3>
+      <a class="button-column button-delete"><i class="fas fa-trash graybtn"></a></i>
+      <a class="button-column button-edit" data-bs-toggle="modal" data-bs-target="#modifica-imagetile-modal"><i class="fas fa-pencil-alt graybtn"></i></a></div><br>
+        <div class="actions">
+        <a>fare click sul tile per visualizzarla nel dettaglio</a> <div>
+    </li>
+
+
+
+    <div class="actions">
+      <button class="addbutt"data-bs-toggle="modal" data-bs-target="#crea-tile-modal"><i class="fas fa-plus-circle" > Add new</i></button>
+    </div>
+  </ol>
+
+  <!--creazione tile -->
+
+  <div class="modal" tabindex="-1" id="crea-tile-modal">
+    <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crea una tile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <a>inserisci il nome dalla tile </a>
+        <input type="text" placeholder="Inserisci qui il nuovo nome" name="nomeBoard" required> <br>
+        <a>Scegli il tipo di tile</a><br>
+         <div class="custom-control custom-radio" required>
+           <input type="radio" class="custom-control-input" id="text-radio" name="example1" value="customEx">
+           <label class="custom-control-label" for="customRadio"><a>Tile testuale</a></label><br>
+           <div id="radio-text" style="display:none">
+            <a>Inserisci il contenuto del tile</a>
+            <input type="text" placeholder="Inserisci qui il contenuto" name="nomeBoard" >
+           </div>
+           <input type="radio" class="custom-control-input" id="image-radio" name="example1" value="customEx">
+           <label class="custom-control-label" for="customRadio"><a>Tile immagine</a></label><br>
+           <div id="radio-image" style="display:none">
+            <button type="button" class="btn btn-primary">scegli immagine</button>
+           </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-primary">Crea tile</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="script.js"></script>
+
+</body>
+</html>
