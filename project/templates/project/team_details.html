@@ -1,95 +1,129 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-    {% block content %}
+{% block content %}
 
     <h1>{{ team.name }}</h1>
     <p>{{ team.description }}</p>
 
-    <form method="post" action="" name="delete_team">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-outline-danger btn-sm" name="delete_team" value="delete_team">Delete Team</button>
-    </form>
+    {% if user_admin.role == "a" %}
+        <form method="post" action="" name="delete_team">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger btn-sm" name="delete_team" value="delete_team">Delete
+                Team
+            </button>
+        </form>
+    {% endif %}
 
     <div class="container-fluid">
         <div class="row">
 
-        {% for member in members %}
-            <div class="col-md-3 flex-column">
-            {% if member.role == "a" %}
+            {% for member in members %}
+                <div class="col-md-3 flex-column">
+                    {% if member.role == "a" %}
 
-                <li class="user-owner-list-item">
-                    <a class="user-list" id="user-list" ><i class="fas fa-user-tie"></i><span class="user-list-text"> (owner) - {{ member.user_username }}</span></a>
-                </li>
-            {% else %}
-                <li class="user-list-item">
-                    <a class="user-list" id="user-list" ><i class="fas fa-user"></i> {{ member.user_username }}</a>
-                </li>
+                        <li class="user-owner-list-item">
+                            <a class="user-list" id="user-list"><i class="fas fa-user-tie"></i><span
+                                    class="user-list-text"> (admin) - {{ member.user_username }}</span></a>
 
-            {% endif %}
-            </div>
+                            {% if user_admin.role == "a" %}
+                                <form method="post" action="" name="remove_user_from_team">
+                                    {% csrf_token %}
 
-        {% endfor %}
-
-
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          Aggiungi utente
-        </button>
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Aggiungi utente</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-                <form method="post" action="" name="add_user_to_team">
-                  <div class="modal-body">
-
-                    {% csrf_token %}
-                    {{ form|crispy }}
-
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success" name="add_user_to_team" value="{{ team.name }}" >Aggiungi</button>
-                  </div>
-                </form>
-            </div>
-          </div>
-        </div>
-
-
-        {% for board in boards %}
-
-            <div class="col-md-8">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ board.name }}</h5>
-                        <p class="card-text">{{ board.description }}</p>
-                        <a href="{% url 'project:board_details' team.name board.name %}" class="btn btn-primary">Go to the board</a>
-
-                        <form method="post" action="" name="delete_board">
-                            {% csrf_token %}
-
-                            {% if user_admin.role != "a" %}
-                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Devi essere un admin">
-                                    <button type="button" class="btn btn-danger" disabled>Elimina Board</button>
-                                </span>
-                            {% else %}
-                                <button type="submit" class="btn btn-danger" name="delete_board" value="{{ board.name }}" >Elimina Board</button>
+                                    <button type="submit" class="btn btn-warning" name="remove_user_from_team"
+                                            value="{{ member.user_username }}">Rimuovi
+                                    </button>
+                                </form>
                             {% endif %}
-                        </form>
+                        </li>
+                    {% else %}
+                        <li class="user-list-item">
+                            <a class="user-list" id="user-list"><i class="fas fa-user"></i>{{ member.user_username }}
+                            </a>
 
+                            {% if user_admin.role == "a" %}
+                                <form method="post" action="" name="remove_user_from_team">
+                                    {% csrf_token %}
+
+                                    <button type="submit" class="btn btn-warning" name="remove_user_from_team"
+                                            value="{{ member.user_username }}">Rimuovi
+                                    </button>
+                                </form>
+
+                            {% endif %}
+                        </li>
+
+                    {% endif %}
+                </div>
+
+            {% endfor %}
+
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Aggiungi utente
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Aggiungi utente</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="post" action="" name="add_user_to_team">
+                            <div class="modal-body">
+
+                                {% csrf_token %}
+                                {{ form|crispy }}
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success" name="add_user_to_team"
+                                        value="{{ team.name }}">Aggiungi
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
 
-        {% endfor %}
 
-        <div class="col-md-8">
+            {% for board in boards %}
+
+                <div class="col-md-8">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ board.name }}</h5>
+                            <p class="card-text">{{ board.description }}</p>
+                            <a href="{% url 'project:board_details' team.name board.name %}" class="btn btn-primary">Go
+                                to the board</a>
+
+                            <form method="post" action="" name="delete_board">
+                                {% csrf_token %}
+
+                                {% if user_admin.role != "a" %}
+                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="popover"
+                                          data-bs-trigger="hover focus" data-bs-content="Devi essere un admin">
+                                    <button type="button" class="btn btn-danger" disabled>Elimina Board</button>
+                                </span>
+                                {% else %}
+                                    <button type="submit" class="btn btn-danger" name="delete_board"
+                                            value="{{ board.name }}">Elimina Board
+                                    </button>
+                                {% endif %}
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+            <div class="col-md-8">
                 <div class="card" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title">Aggiungi board</h5>
@@ -101,11 +135,13 @@
                             <p>Descrizione Board</p>
                             <input type="text" name="board_description">
                             {% if user_admin.role != "a" %}
-                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Devi essere un admin">
+                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover"
+                                      data-bs-trigger="hover focus" data-bs-content="Devi essere un admin">
                                     <button type="submit" class="btn btn-primary" disabled>Crea</button>
                                 </span>
                             {% else %}
-                                <button type="submit" class="btn btn-primary" name="new_board" value="new_board">Crea</button>
+                                <button type="submit" class="btn btn-primary" name="new_board" value="new_board">Crea
+                                </button>
                             {% endif %}
                         </form>
                     </div>
