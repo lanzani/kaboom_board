@@ -2,6 +2,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from .models import Team, TeamMember, Board, Column, Tile
 from .forms import CreateTeam
+from .crud_utils import *
 
 
 # Create your views here.
@@ -36,7 +37,8 @@ def team_details(request, team_name):
         pass
 
     # Se l'utente corrente non è nel team selezionato reindirizza a pagina dei suoi team
-    if not TeamMember.objects.filter(team_name=team, user_username=request.user).exists():
+    if not request.user.is_authenticated or not TeamMember.objects.filter(team_name=team,
+                                                                          user_username=request.user).exists():
         return HttpResponseRedirect("/project")
 
     user_admin = TeamMember.objects.get(team_name=team, user_username=request.user)
@@ -118,11 +120,11 @@ def board_details(request, team_name, board_name):
         pass
 
     # Se l'utente corrente non è nel team selezionato reindirizza a pagina dei suoi team
-    if not TeamMember.objects.filter(team_name=team, user_username=request.user).exists():
+    if not request.user.is_authenticated or not TeamMember.objects.filter(team_name=team,
+                                                                          user_username=request.user).exists():
         return HttpResponseRedirect("/project")
-
     try:
-        columns = Column.objects.filter(team_name=team, board_name=board)
+        columns = Column.objects.filter(team_name=team, board_name=board, status="p")
     except Column.DoesNotExist:
         pass
 
@@ -130,6 +132,30 @@ def board_details(request, team_name, board_name):
         tiles = Tile.objects.filter(team_name=team, board_name=board)
     except Tile.DoesNotExist:
         pass
+
+    if request.method == "POST":
+
+        if request.POST.get("create_column"):
+            column_title = request.POST.get("column_title")
+            create_column(column_title, board, team)
+
+        elif request.POST.get("delete_column"):
+            column_id = request.POST.get("delete_column")
+            delete_column(column_id)
+
+        elif request.POST.get("change_column_status_archived"):
+            column_id = request.POST.get("change_column_status_archived")
+            change_column_status(column_id, "a")
+
+        elif request.POST.get("add_new_tile"):
+            column_id = request.POST.get("add_new_tile")
+            # add_new_tile(column_id, "a")
+
+        elif request.POST.get("delete_tile"):
+            tile_id = request.POST.get("delete_tile")
+            delete_tile(tile_id)
+
+        return HttpResponseRedirect(f"/project/{team_name}/{board_name}")
 
     return render(request, "project/board_details.html", {"columns": columns, "tiles": tiles})
 

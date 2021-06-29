@@ -58,6 +58,7 @@ class Tile(models.Model):
     content = models.TextField()
     multimedia_obj = models.CharField(max_length=45)
 
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     column_title = models.ForeignKey(Column, on_delete=models.CASCADE)
     team_name = models.ForeignKey(Team, on_delete=models.CASCADE)
     board_name = models.ForeignKey(Board, on_delete=models.CASCADE)
