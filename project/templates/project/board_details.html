@@ -217,6 +217,9 @@
                         <a>{{ tile.content }}</a>
 
                     </div>
+                    <div class="modal-footer">
+                    <a>Autor : {{tile.author}}</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -261,12 +264,17 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">{{ tile.title }}</h5>
+
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
+
                     </div>
                     <div class="modal-body">
                         <img class="img-thumbnail" src="/media/{{ tile.multimedia_obj }}"
                              alt="image-{{ tile.title }}">
+                    </div>
+                    <div class="modal-footer">
+                    <a>Autor : {{tile.author}}</a>
                     </div>
                 </div>
             </div>
@@ -382,11 +390,11 @@
 
                                     </div>
 
-                                    <br>
-                                    <div class="actions">
-                                        <p>fare click sul tile per visualizzarla nel dettaglio</p>
-                                    </div>
-                                </li>
+                                <br>
+                                <div class="actions" >
+                                    <p style="font-size:12px;">fare click sul tile per visualizzarla nel dettaglio</p>
+                                </div>
+                            </li>
 
 
                                 <!-- TILE IMMAGINE -->
@@ -406,21 +414,21 @@
                                             </button>
                                         </div>
 
-                                        <div class="col-md-3">
-                                            <form method="post" action="" name="delete_tile">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-danger" name="delete_tile"
-                                                        value="{{ tile.id }}">
-                                                    <em class="fas fa-trash" style="color: white"></em>
-                                                </button>
-                                            </form>
-                                        </div>
+                                    <div class="col-md-3">
+                                        <form method="post" action="" name="delete_tile">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger" name="delete_tile"
+                                                    value="{{ tile.id }}">
+                                                <em class="fas fa-trash" style="color: white"></em>
+                                            </button>
+                                        </form>
                                     </div>
-                                    <br>
-                                    <div class="actions">
-                                        <p>fare click sul tile per visualizzarla nel dettaglio</p>
-                                    </div>
-                                </li>
+                                </div>
+                                <br>
+                                <div class="actions">
+                                    <p style="font-size:12px;">fare click sul tile per visualizzarla nel dettaglio</p>
+                                </div>
+                            </li>
 
                             {% endif %}
 

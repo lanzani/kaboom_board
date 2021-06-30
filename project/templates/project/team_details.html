@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% block style %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'project/css/Teamsheet.css' %}">
 
+{% endblock %}
 {% block content %}
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -23,52 +27,62 @@
         </form>
     {% endif %}
 
+    <table cellpadding="2" cellspacing="0" border="0">
 
-    <div class="row">
 
         {% for member in members %}
             <div class="col-md-3 flex-column">
                 {% if member.role == "a" %}
+                    <tr>
+                        <td>
+                            <li class="user-owner-list-item">
+                                <a class="user-list" id="user-list"><i class="fas fa-user-tie"></i><span
+                                        class="user-list-text"> (admin) - {{ member.user_username }}</span></a>
 
-                    <li class="user-owner-list-item">
-                        <a class="user-list" id="user-list"><i class="fas fa-user-tie"></i><span
-                                class="user-list-text"> (admin) - {{ member.user_username }}</span></a>
+                                {% if user_admin.role == "a" %}
+                                <td>
+                                    <form method="post" action="" name="remove_user_from_team">
+                                        {% csrf_token %}
 
-                        {% if user_admin.role == "a" %}
-                            <form method="post" action="" name="remove_user_from_team">
-                                {% csrf_token %}
-
-                                <button type="submit" class="btn btn-warning" name="remove_user_from_team"
-                                        value="{{ member.user_username }}">Rimuovi
-                                </button>
-                            </form>
-                        {% endif %}
-                    </li>
+                                        <button type="submit" class="btn btn-warning" name="remove_user_from_team"
+                                                value="{{ member.user_username }}">Rimuovi
+                                        </button>
+                                    </form>
+                                </td>
+                                {% endif %}
+                            </li>
+                        </td>
+                    </tr>
                 {% else %}
-                    <li class="user-list-item">
-                        <a class="user-list" id="user-list"><i class="fas fa-user"></i>{{ member.user_username }}
-                        </a>
+                    <tr>
+                        <td>
+                            <li class="user-list-item">
+                                <a class="user-list" id="user-list"><i class="fas fa-user"></i>{{ member.user_username }}
+                                </a>
 
-                        {% if user_admin.role == "a" %}
-                            <form method="post" action="" name="remove_user_from_team">
-                                {% csrf_token %}
+                                {% if user_admin.role == "a" %}
+                                    <td>
+                                        <form method="post" action="" name="remove_user_from_team">
+                                            {% csrf_token %}
 
-                                <button type="submit" class="btn btn-warning" name="remove_user_from_team"
-                                        value="{{ member.user_username }}">Rimuovi
-                                </button>
-                            </form>
-
-                        {% endif %}
-                    </li>
-
+                                            <button type="submit" class="btn btn-warning" name="remove_user_from_team"
+                                                    value="{{ member.user_username }}">Rimuovi
+                                            </button>
+                                        </form>
+                                    </td>
+                                {% endif %}
+                            </li>
+                        </td>
+                    </tr>
                 {% endif %}
             </div>
 
         {% endfor %}
 
+    </table>
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="btn-adduser">
             Aggiungi utente
         </button>
 
@@ -99,7 +113,7 @@
                 </div>
             </div>
         </div>
-    </div>
+
     <br>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for board in boards %}

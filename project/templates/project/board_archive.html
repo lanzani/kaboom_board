@@ -16,32 +16,42 @@
     <a class="btn btn-primary" href="{% url 'project:board_details' team.name board.name %}">Torna alla board</a>
 
 
+
+
+    <div class="row row-cols-1 row-cols-md-4 g-4">
     {% for column in columns %}
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+             <div class="card-body">
+                <h5 class="card-title">{{ column.title }}</h5>
 
 
-        <h2>{{ column.title }}</h2>
-
-        <form method="post" action="" name="change_column_status_in_progress">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-info" name="change_column_status_in_progress" value="{{ column.id }}">
-                Ripristina
-            </button>
-        </form>
+            <form method="post" action="" name="change_column_status_in_progress">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-info" name="change_column_status_in_progress" value="{{ column.id }}">
+                    Ripristina
+                </button>
+            </form>
 
 
 
 
-
+        <table cellpadding="2" cellspacing="0" border="0">
         {% for tile in tiles %}
-            {% if tile.column_title == column %}
 
+                {% if tile.column_title == column %}
+                    <tr>
+                        <td>
+                            <p>Tile: {{ tile.title }}</p>
+                        </td>
 
-                <p>{{ tile.title }}</p>
-
-
-            {% endif %}
+                    </tr>
+                {% endif %}
         {% endfor %}
-
+        </table>
+                </div>
+            </div>
+        </div>
     {% endfor %}
-
+    </div>
 {% endblock %}
