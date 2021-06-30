@@ -134,9 +134,7 @@ def team_details(request, team_name):
 
 
 def board_details(request, team_name, board_name):
-    tile_text_form = CreateTileText()
-    tile_mul_form = CreateTileMul()
-    column_form = CreateColumn()
+
 
     try:
         team = Team.objects.get(pk=team_name)
@@ -237,15 +235,49 @@ def board_details(request, team_name, board_name):
             tile_multimedia_obj = tile_mul_form.cleaned_data["multimedia_obj"]
             create_tile(tile_title, tile_content_type, "", tile_multimedia_obj, request.user, column, board, team)
 
+        elif request.POST.get("edit_txt_tile"):
+            tile_text_form = CreateTileText(request.POST)
+
+            if not tile_text_form.is_valid():
+                return HttpResponseRedirect(f"/project/{team_name}/{board_name}")
+
+            tile_id = request.POST.get("edit_txt_tile")
+
+            tile_title = tile_text_form.cleaned_data["title"]
+            tile_content = tile_text_form.cleaned_data["content"]
+            tile_content_type = tile_text_form.cleaned_data["content_type"]
+
+            edit_txt_tile(tile_id, tile_title, tile_content, tile_content_type)
+
+        elif request.POST.get("edit_mul_tile"):
+            tile_mul_form = CreateTileMul(request.POST, files=request.FILES)
+
+            if not tile_mul_form.is_valid():
+                return HttpResponseRedirect(f"/project/{team_name}/{board_name}")
+
+            tile_id = request.POST.get("edit_mul_tile")
+
+            tile_title = tile_mul_form.cleaned_data["title"]
+            tile_content_type = tile_mul_form.cleaned_data["content_type"]
+            tile_multimedia_obj = tile_mul_form.cleaned_data["multimedia_obj"]
+
+            edit_mul_tile(tile_id, tile_title, tile_multimedia_obj, tile_content_type)
+
         elif request.POST.get("delete_tile"):
             tile_id = request.POST.get("delete_tile")
             delete_tile(tile_id)
 
         return HttpResponseRedirect(f"/project/{team_name}/{board_name}")
 
+    tile_text_forms = {tile: CreateTileText(initial={"title": tile.title, "content": tile.content, "content_type": tile.content_type}) for tile in tiles if tile.content != ""}
+    tile_mul_forms = {tile: CreateTileMul(initial={"title": tile.title, "multimedia_obj": tile.multimedia_obj, "content_type": tile.content_type}) for tile in tiles if tile.content == ""}
+    tile_text_form = CreateTileText()
+    tile_mul_form = CreateTileMul()
+    column_form = CreateColumn()
+
     return render(request, "project/board_details.html",
                   {"team": team, "board": board, "columns": columns, "tiles": tiles, "board_form": board_form,
-                   "tile_text_form": tile_text_form, "tile_mul_form": tile_mul_form, "column_form":column_form,
+                   "tile_text_forms": tile_text_forms,"tile_text_form": tile_text_form, "tile_mul_forms": tile_mul_forms,"tile_mul_form": tile_mul_form, "column_form": column_form,
                    "user_admin": user_admin})
 
 

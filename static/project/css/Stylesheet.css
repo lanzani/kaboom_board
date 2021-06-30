@@ -24,7 +24,7 @@ ol {
 
 ol.list {
   padding-top: 2em;
-  padding-left: 15px;
+
   max-width: 650px;
   margin: 0 auto;
 }
@@ -174,10 +174,6 @@ ol.kanban {
   list-style: none;
 }
 
-.dd-list .dd-list {
-  padding-left: 30px;
-}
-
 .dd-collapsed .dd-list {
   display: none;
 }
@@ -195,27 +191,6 @@ ol.kanban {
   border-radius: 3px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
-}
-
-
-.dd-item > button {
-  display: block;
-  position: relative;
-  cursor: move;
-  float: left;
-  width: 25px;
-  height: 20px;
-  margin: 5px 0;
-  padding: 0;
-  text-indent: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  border: 0;
-
-  font-size: 12px;
-  line-height: 1;
-  text-align: center;
-  font-weight: bold;
 }
 
 .dd-item > button:before {

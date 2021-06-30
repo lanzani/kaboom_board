@@ -3,6 +3,8 @@ from datetime import date
 from .models import Team, TeamMember, Board, Column, Tile
 
 
+# todo refactor, rivedere come organizzare i metodi e il passaggio dei parametri
+
 # TODO Team
 
 # Board
@@ -37,8 +39,6 @@ def edit_board(old_name, new_name, new_description, team):
 
         b.save()
         return new_name
-
-
 
 
 # Column
@@ -80,6 +80,7 @@ def edit_column(old_title, new_title, board, team):
         c.title = new_title
         c.save()
 
+
 def change_column_status(column_id, status):
     c = Column.objects.get(pk=column_id)
     c.status = status
@@ -91,6 +92,36 @@ def change_column_status(column_id, status):
 def create_tile(title, content_type, content, multimedia_obj, author, column, board, team):
     t = Tile(title=title, content_type=content_type, content=content, multimedia_obj=multimedia_obj,
              creation_date=date.today(), author=author, column_title=column, team_name=team, board_name=board)
+
+    t.save()
+
+
+def edit_txt_tile(tile_id, title, content, content_type):
+    t = Tile.objects.get(pk=tile_id)
+
+    if title != "":
+        t.title = title
+
+    if content_type != "":
+        t.content_type = content_type
+
+    if content != "":
+        t.content = content
+
+    t.save()
+
+
+def edit_mul_tile(tile_id, title, multimedia_obj, content_type):
+    t = Tile.objects.get(pk=tile_id)
+
+    if title != "":
+        t.title = title
+
+    if content_type != "":
+        t.content_type = content_type
+
+    if multimedia_obj != "":
+        t.multimedia_obj = multimedia_obj
 
     t.save()
 

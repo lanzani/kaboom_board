@@ -109,6 +109,9 @@
 
 
 
+
+
+
     {% for column in columns %}
         <!-- form modifica colonna-->
         <div class="modal" tabindex="-1" id="modifica-colonna-{{ column.id }}-modal">
@@ -128,16 +131,16 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
                             <button type="submit" class="btn btn-primary" name="edit_column"
-                                        value="{{ column.id }}">
-                                    Modifica Colonna
-                                </button>
+                                    value="{{ column.id }}">
+                                Modifica Colonna
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Creazione tile text -->
+        <!-- Creazione modal tile text -->
         <div class="modal" tabindex="-1" id="crea-tile-modal-{{ column.id }}-text">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -166,7 +169,7 @@
             </div>
         </div>
 
-        <!-- Creazione tile mul -->
+        <!-- Creazione modal tile mul -->
         <div class="modal" tabindex="-1" id="crea-tile-modal-{{ column.id }}-mul">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -198,98 +201,109 @@
 
 
     <!-- Crea modal per tile -->
-    {% for tile in tiles %}
-        {% if tile.content != "" %}
+    {% for tile, tile_text_form in tile_text_forms.items %}
 
 
-            <!-- Contenuto text tile -->
-            <div class="modal" tabindex="-1" id="text-type-tile-{{ tile.id }}">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">{{ tile.title }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <a>{{ tile.content }}</a>
+        <!-- Contenuto text tile -->
+        <div class="modal" tabindex="-1" id="text-type-tile-{{ tile.id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ tile.title }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <a>{{ tile.content }}</a>
 
-                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-        {% else %}
+        <!-- form modifica text tile -->
+        <div class="modal" tabindex="-1" id="modifica-{{ tile.id }}-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modifica {{ tile.title }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
 
-            <!-- Contenuto image tile -->
-            <div class="modal" tabindex="-1" id="image-type-tile-{{ tile.id }}">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">{{ tile.title }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                        </div>
+                    <form method="post" action="" name="edit_txt_tile">
+                        {% csrf_token %}
+
                         <div class="modal-body">
-                            <img class="img-thumbnail" src="/media/{{ tile.multimedia_obj }}"
-                                 alt="image-{{ tile.title }}">
+                            {{ tile_text_form|crispy }}
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi
+                                </button>
+                                <button type="submit" class="btn btn-success" name="edit_txt_tile"
+                                        value="{{ tile.id }}">
+                                    Modifica Tile
+                                </button>
+                            </div>
+
                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+    {% for tile, tile_mul_form in tile_mul_forms.items %}
+
+
+        <!-- Contenuto image tile -->
+        <div class="modal" tabindex="-1" id="image-type-tile-{{ tile.id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ tile.title }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img class="img-thumbnail" src="/media/{{ tile.multimedia_obj }}"
+                             alt="image-{{ tile.title }}">
                     </div>
                 </div>
             </div>
+        </div>
 
-        {% endif %}
+        <!-- form modifica image tile -->
+        <div class="modal" tabindex="-1" id="modifica-{{ tile.id }}-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modifica {{ tile.title }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <form method="post" action="" name="edit_mul_tile" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="modal-body">
+                            {{ tile_mul_form|crispy }}
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                <button type="submit" class="btn btn-info" name="edit_mul_tile"
+                                        value="{{ tile.id }}">
+                                    Modifica Tile
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
 
 
     {% endfor %}
-
-
-
-
-
-    <!-- form modifica text tile -->
-    <div class="modal" tabindex="-1" id="modifica-nometile-modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modifica la tile</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <a>inserisci il nome da modificare </a>
-                    <input type="text" placeholder="Inserisci qui il nuovo nome" name="nomeBoard"> <br>
-                    <a>inserisci contenuto da modificare</a>
-                    <input type="text" placeholder="Inserisci qui il nuovo nome" name="nomeBoard">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                    <button type="button" class="btn btn-primary">Salva modifiche</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- form modifica image tile -->
-    <div class="modal" tabindex="-1" id="modifica-imagetile-modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modifica tile </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <a>inserisci il nome da modificare </a>
-                    <input type="text" placeholder="Inserisci qui il nuovo nome" name="nomeBoard"> <br>
-                    <button type="button" class="btn btn-primary">scegli immagine</button>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                    <button type="button" class="btn btn-primary">Salva modifiche</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
 
     <!-- Crea Colonne -->
@@ -300,7 +314,7 @@
 
                 <div class="row">
                     <div class="col-md-3">
-                        <form method="post" action="" name="change_column_status_archived">
+                        <form method="post" action="" name="change_column_status_archived" enctype="multipart/form-data">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-info" name="change_column_status_archived"
                                     value="{{ column.id }}">
@@ -333,8 +347,8 @@
                 {% if tile.column_title == column %}
 
                     <!-- TILE TESTO -->
-            <ul id="sortable1" class="connectedSortable">
-                    {% if tile.content != "" %}
+                    <ul id="sortable1" class="connectedSortable">
+                        {% if tile.content != "" %}
 
                             <li class="dd-item text" data-id="1" data-bs-toggle="modal"
                                 data-bs-target="#text-type-tile-{{ tile.id }}"
@@ -372,8 +386,8 @@
                             </li>
 
 
-                        <!-- TILE IMMAGINE -->
-                    {% else %}
+                            <!-- TILE IMMAGINE -->
+                        {% else %}
 
                             <li class="dd-item image" data-id="1" data-bs-toggle="modal"
                                 data-bs-target="#image-type-tile-{{ tile.id }}"
@@ -404,8 +418,8 @@
                                 </div>
                             </li>
 
-                    {% endif %}
-            </ul>
+                        {% endif %}
+                    </ul>
 
                 {% endif %}
             {% endfor %}
