@@ -137,3 +137,4 @@ kaboom_board/settings.py
 /media/*
 media
 media/*
+media/

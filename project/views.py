@@ -2,7 +2,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from .models import Team, TeamMember, Board, Column, Tile
 from django.contrib.auth.models import User
-from .forms import CreateTeam, AddUserToTeam, CreateBoard, CreateTileText, CreateTileMul
+from .forms import CreateTeam, AddUserToTeam, CreateBoard, CreateTileText, CreateTileMul, CreateColumn
 from .crud_utils import *
 
 
@@ -136,6 +136,7 @@ def team_details(request, team_name):
 def board_details(request, team_name, board_name):
     tile_text_form = CreateTileText()
     tile_mul_form = CreateTileMul()
+    column_form = CreateColumn()
 
     try:
         team = Team.objects.get(pk=team_name)
@@ -180,8 +181,23 @@ def board_details(request, team_name, board_name):
             return HttpResponseRedirect(f"/project/{team_name}/{n}")
 
         elif request.POST.get("create_column"):
-            column_title = request.POST.get("column_title")
+            column_form = CreateColumn(request.POST)
+
+            if not column_form.is_valid():
+                return HttpResponseRedirect(f"/project/{team_name}/{board_name}")
+
+            column_title = request.POST.get("title")
             create_column(column_title, board, team)
+
+        elif request.POST.get("edit_column"):
+            column_form = CreateColumn(request.POST)
+
+            if not column_form.is_valid():
+                return HttpResponseRedirect(f"/project/{team_name}/{board_name}")
+            cc = Column.objects.get(pk=request.POST.get("edit_column"))
+            column_old_title = cc.title
+            column_new_title = request.POST.get("title")
+            edit_column(column_old_title, column_new_title, board, team)
 
         elif request.POST.get("delete_column"):
             column_id = request.POST.get("delete_column")
@@ -229,7 +245,7 @@ def board_details(request, team_name, board_name):
 
     return render(request, "project/board_details.html",
                   {"team": team, "board": board, "columns": columns, "tiles": tiles, "board_form": board_form,
-                   "tile_text_form": tile_text_form, "tile_mul_form": tile_mul_form,
+                   "tile_text_form": tile_text_form, "tile_mul_form": tile_mul_form, "column_form":column_form,
                    "user_admin": user_admin})
 
 

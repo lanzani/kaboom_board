@@ -70,7 +70,7 @@
                                     <button type="submit" class="btn btn-sucess" disabled>Modifica</button>
                                 </span>
                         {% else %}
-                            <button type="submit" class="btn btn-success" name="edit_board" value="edit_board">Modifica
+                            <button type="submit" class="btn btn-primary" name="edit_board" value="edit_board">Modifica
                             </button>
                         {% endif %}
 
@@ -94,36 +94,11 @@
                     <div class="modal-body">
 
                         {% csrf_token %}
-                        <p>Inserisci il nome della colonna</p>
-                        <input type="text" name="column_title" placeholder="Inserisci qui il nome" required>
-
-                        <div class="custom-control custom-radio" required>
-                            <input type="radio" class="custom-control-input" id="customRadio" name="example1"
-                                   value="customEx">
-                            <label class="custom-control-label" for="customRadio"><i
-                                    class="fas fa-square greenbtn"></i></label><br>
-                            <input type="radio" class="custom-control-input" id="customRadio" name="example1"
-                                   value="customEx">
-                            <label class="custom-control-label" for="customRadio"><i
-                                    class="fas fa-square redbtn"></i></i>
-                            </label><br>
-                            <input type="radio" class="custom-control-input" id="customRadio" name="example1"
-                                   value="customEx">
-                            <label class="custom-control-label" for="customRadio"><i
-                                    class="fas fa-square bluebtn"></i></label><br>
-                            <input type="radio" class="custom-control-input" id="customRadio" name="example1"
-                                   value="customEx">
-                            <label class="custom-control-label" for="customRadio"><i
-                                    class="fas fa-square yellowbtn"></i></label><br>
-                            <input type="radio" class="custom-control-input" id="customRadio" name="example1"
-                                   value="customEx">
-                            <label class="custom-control-label" for="customRadio"><i
-                                    class="fas fa-square purplebtn"></i></label><br>
-                        </div>
+                        {{ column_form|crispy }}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                        <button type="submit" class="btn btn-primary" name="create_column" value="create_column">Crea
+                        <button type="submit" class="btn btn-success" name="create_column" value="create_column">Crea
                             colonna
                         </button>
                     </div>
@@ -143,38 +118,21 @@
                         <h5 class="modal-title">Modifica la colonna {{ column.title }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <a>Inserisci il nuovo nome della colonna </a>
-                        <input type="text" placeholder="Inserisci qui il nome" name="nomeColonna" required><br>
-                        <a>Scegli un nuovo colore per la colonna</a>
-                        <div class="custom-control custom-radio" required>
-                            <input type="radio" class="custom-control-input" id="customRadio" name="example1"
-                                   value="customEx">
-                            <label class="custom-control-label" for="customRadio"><i
-                                    class="fas fa-square greenbtn"></i></label><br>
-                            <input type="radio" class="custom-control-input" id="customRadio" name="example1"
-                                   value="customEx">
-                            <label class="custom-control-label" for="customRadio"><i
-                                    class="fas fa-square redbtn"></i></i>
-                            </label><br>
-                            <input type="radio" class="custom-control-input" id="customRadio" name="example1"
-                                   value="customEx">
-                            <label class="custom-control-label" for="customRadio"><i
-                                    class="fas fa-square bluebtn"></i></label><br>
-                            <input type="radio" class="custom-control-input" id="customRadio" name="example1"
-                                   value="customEx">
-                            <label class="custom-control-label" for="customRadio"><i
-                                    class="fas fa-square yellowbtn"></i></label><br>
-                            <input type="radio" class="custom-control-input" id="customRadio" name="example1"
-                                   value="customEx">
-                            <label class="custom-control-label" for="customRadio"><i
-                                    class="fas fa-square purplebtn"></i></label><br>
+                    <form method="post" action="" name="edit_column">
+                        {% csrf_token %}
+                        <div class="modal-body">
+
+                            {{ column_form|crispy }}
+
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                        <button type="button" class="btn btn-primary">Salva Modifiche</button>
-                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                            <button type="submit" class="btn btn-primary" name="edit_column"
+                                        value="{{ column.id }}">
+                                    Modifica Colonna
+                                </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -196,7 +154,7 @@
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                                <button type="submit" class="btn btn-info" name="add_new_txt_tile"
+                                <button type="submit" class="btn btn-success" name="add_new_txt_tile"
                                         value="{{ column.id }}">
                                     Nuovo Tile
                                 </button>
@@ -373,11 +331,16 @@
 
             {% for tile in tiles %}
                 {% if tile.column_title == column %}
+
+                    <!-- TILE TESTO -->
                     {% if tile.content != "" %}
 
                         <li class="dd-item text" data-id="1" data-bs-toggle="modal"
                             data-bs-target="#text-type-tile-{{ tile.id }}"
-                            style="background-color:palegreen;">
+                                {% if tile.content_type == "o" %} style="background-color:palegreen;" {% else %}
+                            style="background-color:powderblue;" {% endif %}>
+
+
                             <h3 class="title dd-handle">{{ tile.title }}</h3>
 
 
@@ -399,9 +362,7 @@
                                     </form>
                                 </div>
 
-
                             </div>
-
 
                             <br>
                             <div class="actions">
@@ -410,11 +371,13 @@
                         </li>
 
 
+                        <!-- TILE IMMAGINE -->
                     {% else %}
 
                         <li class="dd-item image" data-id="1" data-bs-toggle="modal"
                             data-bs-target="#image-type-tile-{{ tile.id }}"
-                            style="background-color:powderblue;">
+                                {% if tile.content_type == "o" %} style="background-color:palegreen;" {% else %}
+                            style="background-color:powderblue;" {% endif %}>
                             <h3 class="title dd-handle">{{ tile.title }}</h3>
                             <div class="row">
                                 <div class="col-md-3">
@@ -433,15 +396,12 @@
                                         </button>
                                     </form>
                                 </div>
-
-
                             </div>
                             <br>
                             <div class="actions">
                                 <a>fare click sul tile per visualizzarla nel dettaglio</a>
                             </div>
                         </li>
-
 
                     {% endif %}
 

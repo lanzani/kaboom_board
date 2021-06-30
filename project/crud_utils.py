@@ -65,6 +65,21 @@ def delete_column(column_id):
         c.delete()
 
 
+def edit_column(old_title, new_title, board, team):
+    column_already_exist = False
+
+    if old_title != new_title:
+        column_already_exist = (
+                len(Column.objects.filter(title=new_title, board_name=board, team_name=team)) > 0
+        )
+
+    if column_already_exist:
+        print("La board è già nel team")
+    else:
+        c = Column.objects.get(title=old_title, board_name=board, team_name=team)
+        c.title = new_title
+        c.save()
+
 def change_column_status(column_id, status):
     c = Column.objects.get(pk=column_id)
     c.status = status
