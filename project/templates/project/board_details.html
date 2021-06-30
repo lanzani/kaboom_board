@@ -7,23 +7,34 @@
 {% endblock %}
 
 {% block content %}
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'project:index' %}">Teams</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'project:team_details' team.name %}">(team) {{ team.name }}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">(board) {{ board.name }}</li>
+        </ol>
+    </nav>
 
     <!-- Intestazione board -->
     <div class="board_desc">
 
         <h1>{{ board.name }}</h1>
 
-        <a class="btn btn-primary" href="{% url 'project:view_board_archive' team.name board.name %}">Vai
-            all'archivio</a>
-        <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
-                data-bs-target="#modifica-nome-modal">
-            Modifica Board
-        </button>
+        <div class="btn-group" role="group">
+            <a class="btn btn-primary" href="{% url 'project:view_board_archive' team.name board.name %}">Vai
+                all'archivio</a>
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                    data-bs-target="#modifica-nome-modal">
+                Modifica Board
+            </button>
 
-        <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                data-bs-target="#Aggiungi-colonna-modal">
-            <em class="fas fa-plus" id="btn-add"></em> Aggiungi Colonna
-        </button>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                    data-bs-target="#Aggiungi-colonna-modal">
+                <em class="fas fa-plus" id="btn-add"></em> Aggiungi Colonna
+            </button>
+        </div>
 
 
         <hr class="solid">
@@ -36,7 +47,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modifica il nome della board</h5>
+                    <h5 class="modal-title">Modifica la board {{ board.name }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -168,8 +179,8 @@
             </div>
         </div>
 
-        <!-- Creazione tile -->
-        <div class="modal" tabindex="-1" id="crea-tile-modal-{{ column.id }}">
+        <!-- Creazione tile text -->
+        <div class="modal" tabindex="-1" id="crea-tile-modal-{{ column.id }}-text">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -177,31 +188,45 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <form method="post" action="" name="add_new_tile">
+                    <form method="post" action="" name="add_new_txt_tile">
                         {% csrf_token %}
 
                         <div class="modal-body">
-                            <input placeholder="Inserisci qui il nuovo nome" type="text" name="tile_title" required>
+                            {{ tile_text_form|crispy }}
 
-                            <a>Scegli il tipo di tile</a><br>
-                            <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" id="text-radio" name="example1"
-                                       value="customEx">
-                                <label class="custom-control-label" for="customRadio"><a>Tile testuale</a></label><br>
-                                <div id="radio-text" style="display:none">
-                                    <a>Inserisci il contenuto del tile</a>
-                                    <input type="text" placeholder="Inserisci qui il contenuto" name="nomeBoard">
-                                </div>
-                                <input type="radio" class="custom-control-input" id="image-radio" name="example1"
-                                       value="customEx">
-                                <label class="custom-control-label" for="customRadio"><a>Tile immagine</a></label><br>
-                                <div id="radio-image" style="display:none">
-                                    <button type="button" class="btn btn-primary">scegli immagine</button>
-                                </div>
-                            </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                                <button type="submit" class="btn btn-info" name="add_new_tile" value="{{ column.id }}">
+                                <button type="submit" class="btn btn-info" name="add_new_txt_tile"
+                                        value="{{ column.id }}">
+                                    Nuovo Tile
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Creazione tile mul -->
+        <div class="modal" tabindex="-1" id="crea-tile-modal-{{ column.id }}-mul">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Crea una tile per {{ column.title }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <form method="post" action="" name="add_new_mul_tile">
+                        {% csrf_token %}
+
+                        <div class="modal-body">
+                            {{ tile_mul_form|crispy }}
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                <button type="submit" class="btn btn-info" name="add_new_mul_tile"
+                                        value="{{ column.id }}">
                                     Nuovo Tile
                                 </button>
                             </div>
@@ -328,73 +353,95 @@
 
             {% for tile in tiles %}
                 {% if tile.column_title == column %}
+                    {% if tile.content_type == "o" %}
 
-                    <li class="dd-item text" data-id="1" data-bs-toggle="modal" data-bs-target="#text-type-tile"
-                        style="background-color:palegreen;">
-                        <h3 class="title dd-handle">{{ tile.title }}</h3>
+                        <li class="dd-item text" data-id="1" data-bs-toggle="modal" data-bs-target="#text-type-tile"
+                            style="background-color:palegreen;">
+                            <h3 class="title dd-handle">{{ tile.title }}</h3>
 
 
-                        <div class="row">
-                            <div class="col-md-3">
-                                <button class="btn btn-secondary" data-bs-toggle="modal"
-                                        data-bs-target="#modifica-{{ tile.id }}-modal">
-                                    <em class="fas fa-pencil-alt" style="color: white"></em>
-                                </button>
-                            </div>
-
-                            <div class="col-md-3">
-                                <form method="post" action="" name="delete_tile">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger" name="delete_tile"
-                                            value="{{ tile.id }}">
-                                        <em class="fas fa-trash" style="color: white"></em>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <button class="btn btn-secondary" data-bs-toggle="modal"
+                                            data-bs-target="#modifica-{{ tile.id }}-modal">
+                                        <em class="fas fa-pencil-alt" style="color: white"></em>
                                     </button>
-                                </form>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <form method="post" action="" name="delete_tile">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger" name="delete_tile"
+                                                value="{{ tile.id }}">
+                                            <em class="fas fa-trash" style="color: white"></em>
+                                        </button>
+                                    </form>
+                                </div>
+
+
                             </div>
 
 
-                        </div>
+                            <br>
+                            <div class="actions">
+                                <p>fare click sul tile per visualizzarla nel dettaglio</p>
+                            </div>
+                        </li>
+                    {% else %}
+
+                        <li class="dd-item image" data-id="1" data-bs-toggle="modal"
+                            data-bs-target="#image-type-tile"
+                            style="background-color:powderblue;">
+                            <h3 class="title dd-handle">{{ tile.title }}</h3>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <button class="btn btn-secondary" data-bs-toggle="modal"
+                                            data-bs-target="#modifica-{{ tile.id }}-modal">
+                                        <em class="fas fa-pencil-alt" style="color: white"></em>
+                                    </button>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <form method="post" action="" name="delete_tile">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger" name="delete_tile"
+                                                value="{{ tile.id }}">
+                                            <em class="fas fa-trash" style="color: white"></em>
+                                        </button>
+                                    </form>
+                                </div>
 
 
-                        <br>
-                        <div class="actions">
-                            <p>fare click sul tile per visualizzarla nel dettaglio</p>
-                        </div>
-                    </li>
+                            </div>
+                            <br>
+                            <div class="actions">
+                                <a>fare click sul tile per visualizzarla nel dettaglio</a>
+                            </div>
+                        </li>
+
+
+
+                    {% endif %}
+
 
                 {% endif %}
             {% endfor %}
 
 
-            {#            <li class="dd-item image" data-id="1" data-bs-toggle="modal" data-bs-target="#image-type-tile"#}
-            {#                style="background-color:powderblue;">#}
-            {#                <h3 class="title dd-handle">Tile title</h3>#}
-            {#                <a class="button-column button-delete"><i class="fas fa-trash graybtn"></i></a>#}
-            {#                <a class="button-column button-edit" data-bs-toggle="modal"#}
-            {#                   data-bs-target="#modifica-imagetile-modal"><i#}
-            {#                        class="fas fa-pencil-alt graybtn"></i></a>#}
-            {#                <br>#}
-            {#                <div class="actions">#}
-            {#                    <a>fare click sul tile per visualizzarla nel dettaglio</a>#}
-            {#                </div>#}
-            {#            </li>#}
 
-
-            {#            <a href="" data-bs-toggle="modal" data-bs-target="#createTeamModal"#}
-            {#               style="color:#fff; text-decoration: none">#}
-            {#                <div class="card bg-success h-100">#}
-            {#                    <div class="card-body d-flex align-items-center justify-content-center">#}
-            {#                        Crea nuovo team#}
-            {#                    </div>#}
-            {#                </div>#}
-            {#            </a>#}
 
             <div class="actions">
-
-                <button class="btn btn-outline-success" data-bs-toggle="modal"
-                        data-bs-target="#crea-tile-modal-{{ column.id }}">
-                    <em class="fas fa-plus-circle"></em> Crea tile
-                </button>
+                <p>Crea tile:</p>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-outline-success" data-bs-toggle="modal"
+                            data-bs-target="#crea-tile-modal-{{ column.id }}-text">
+                        <em class="fas fa-plus-circle"></em>Testuale
+                    </button>
+                    <button class="btn btn-outline-success" data-bs-toggle="modal"
+                            data-bs-target="#crea-tile-modal-{{ column.id }}-mul">
+                        <em class="fas fa-plus-circle"></em>Multimediale
+                    </button>
+                </div>
             </div>
         </ol>
     {% endfor %}

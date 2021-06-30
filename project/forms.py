@@ -1,22 +1,37 @@
 from django import forms
-
+from .models import Tile
 
 class CreateTeam(forms.Form):
     name = forms.CharField(label="Nome", max_length=30)
     description = forms.CharField(label="Descrizione", max_length=255, required=False)
 
 
-# class CreateTile(forms.Form):
+class CreateTileText(forms.Form):
+    CONTENT_OPTIONS = (
+        ("o", "Organizzativo"),
+        ("i", "Informativo")
+    )
+
+    title = forms.CharField(label="Titolo", max_length=45)
+    content = forms.CharField(label="Contenuto", widget=forms.Textarea)
+    content_type = forms.ChoiceField(label='Tipologia messaggio', choices=CONTENT_OPTIONS, widget=forms.RadioSelect)
+
+
+# class CreateTileMul(forms.Form):
 #     CONTENT_OPTIONS = (
-#         ("o", "org"),
-#         ("i", "inf")
+#         ("o", "Organizzativo"),
+#         ("i", "Informativo")
 #     )
 #
 #     title = forms.CharField(label="Titolo", max_length=45)
-#     # creation_date = forms.DateTimeField(default=timezone.now)
-#     content_type = forms.CharField(label="Tipo contenuto", max_length=1, choices=CONTENT_OPTIONS)
-#     content = forms.CharField(label="Contenuto", max_length=255)
-#     multimedia_obj = forms.CharField(label="Immagine", max_length=45)
+#     multimedia_obj = forms.ImageField(label="Immagine")
+#     content_type = forms.ChoiceField(label='Tipologia messaggio', choices=CONTENT_OPTIONS, widget=forms.RadioSelect)
+
+class CreateTileMul(forms.ModelForm):
+    class Meta:
+        model = Tile
+        fields = ("title", "content_type", "multimedia_obj")
+
 
 class AddUserToTeam(forms.Form):
     ROLE_OPTIONS = (

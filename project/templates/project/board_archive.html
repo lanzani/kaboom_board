@@ -2,6 +2,17 @@
 
 {% block content %}
 
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'project:index' %}">Teams</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'project:team_details' team.name %}">(team) {{ team.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'project:board_details' team.name board.name %}">(board) {{ board.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">(archive) {{ board.name }}</li>
+        </ol>
+    </nav>
+
+
     <a class="btn btn-primary" href="{% url 'project:board_details' team.name board.name %}">Torna alla board</a>
 
 

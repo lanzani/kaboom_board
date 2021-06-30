@@ -2,7 +2,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from .models import Team, TeamMember, Board, Column, Tile
 from django.contrib.auth.models import User
-from .forms import CreateTeam, AddUserToTeam, CreateBoard
+from .forms import CreateTeam, AddUserToTeam, CreateBoard, CreateTileText, CreateTileMul
 from .crud_utils import *
 
 
@@ -46,6 +46,7 @@ def index(request):
 
 
 def team_details(request, team_name):
+    # TODO fare form modifica team
     user_form = AddUserToTeam()
     board_form = CreateBoard()
 
@@ -133,7 +134,8 @@ def team_details(request, team_name):
 
 
 def board_details(request, team_name, board_name):
-
+    tile_text_form = CreateTileText()
+    tile_mul_form = CreateTileMul()
 
     try:
         team = Team.objects.get(pk=team_name)
@@ -147,7 +149,7 @@ def board_details(request, team_name, board_name):
     except Board.DoesNotExist:
         return HttpResponseRedirect("/project/%s" % team_name)
 
-    board_form = CreateBoard(initial={"name": board.name, "description":board.description})
+    board_form = CreateBoard(initial={"name": board.name, "description": board.description})
 
     # Se l'utente corrente non è nel team selezionato reindirizza a pagina dei suoi team
     if not request.user.is_authenticated or not TeamMember.objects.filter(team_name=team,
@@ -189,13 +191,35 @@ def board_details(request, team_name, board_name):
             column_id = request.POST.get("change_column_status_archived")
             change_column_status(column_id, "a")
 
-        elif request.POST.get("add_new_tile"):
-            tile_title = request.POST.get("tile_title")
-            column_id = request.POST.get("add_new_tile")
+        elif request.POST.get("add_new_txt_tile"):
+            tile_text_form = CreateTileText(request.POST)
+
+            if not tile_text_form.is_valid():
+                return HttpResponseRedirect(f"/project/{team_name}/{board_name}")
+
+            column_id = request.POST.get("add_new_txt_tile")
             column = Column.objects.get(pk=column_id)
 
-            create_tile(tile_title, "", "", "", request.user, column, board, team)
-            # create_tile(title, content_type, content, multimedia_obj, request.user, column, board, team)
+            tile_title = tile_text_form.cleaned_data["title"]
+            tile_content = tile_text_form.cleaned_data["content"]
+            tile_content_type = tile_text_form.cleaned_data["content_type"]
+
+            create_tile(tile_title, tile_content_type, tile_content, "", request.user, column, board, team)
+
+
+        elif request.POST.get("add_new_mul_tile"):
+            tile_mul_form = CreateTileMul(request.POST)
+
+            if not tile_mul_form.is_valid():
+                return HttpResponseRedirect(f"/project/{team_name}/{board_name}")
+
+            column_id = request.POST.get("add_new_txt_tile")
+            column = Column.objects.get(pk=column_id)
+
+            tile_title = tile_mul_form.cleaned_data["title"]
+            tile_content = tile_mul_form.cleaned_data["content"]
+            tile_content_type = tile_mul_form.cleaned_data["content_type"]
+            create_tile(tile_title, tile_content_type, tile_content, "", request.user, column, board, team)
 
         elif request.POST.get("delete_tile"):
             tile_id = request.POST.get("delete_tile")
@@ -205,6 +229,7 @@ def board_details(request, team_name, board_name):
 
     return render(request, "project/board_details.html",
                   {"team": team, "board": board, "columns": columns, "tiles": tiles, "board_form": board_form,
+                   "tile_text_form": tile_text_form, "tile_mul_form": tile_mul_form,
                    "user_admin": user_admin})
 
 

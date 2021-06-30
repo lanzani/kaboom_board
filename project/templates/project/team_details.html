@@ -2,6 +2,14 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'project:index' %}">Teams</a></li>
+            <li class="breadcrumb-item active" aria-current="page">(team) {{ team.name }}</li>
+        </ol>
+    </nav>
+
 
     <h1>{{ team.name }}</h1>
     <p>{{ team.description }}</p>

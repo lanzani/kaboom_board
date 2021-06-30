@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django_resized import ResizedImageField
 
 
 class Team(models.Model):
@@ -55,8 +56,9 @@ class Tile(models.Model):
     title = models.CharField(max_length=45)
     creation_date = models.DateTimeField(default=timezone.now)
     content_type = models.CharField(max_length=1, choices=CONTENT_OPTIONS)
-    content = models.TextField()
-    multimedia_obj = models.CharField(max_length=45)
+    content = models.TextField(blank=True, null=True)
+    # multimedia_obj = models.CharField(max_length=45)
+    multimedia_obj = ResizedImageField(size=[900, 900], upload_to="img/%y", blank=True, null=True)
 
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     column_title = models.ForeignKey(Column, on_delete=models.CASCADE)
