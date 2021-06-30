@@ -208,18 +208,18 @@ def board_details(request, team_name, board_name):
 
 
         elif request.POST.get("add_new_mul_tile"):
-            tile_mul_form = CreateTileMul(request.POST)
+            tile_mul_form = CreateTileMul(data=request.POST, files=request.FILES)
 
             if not tile_mul_form.is_valid():
                 return HttpResponseRedirect(f"/project/{team_name}/{board_name}")
 
-            column_id = request.POST.get("add_new_txt_tile")
+            column_id = request.POST.get("add_new_mul_tile")
             column = Column.objects.get(pk=column_id)
 
             tile_title = tile_mul_form.cleaned_data["title"]
-            tile_content = tile_mul_form.cleaned_data["content"]
             tile_content_type = tile_mul_form.cleaned_data["content_type"]
-            create_tile(tile_title, tile_content_type, tile_content, "", request.user, column, board, team)
+            tile_multimedia_obj = tile_mul_form.cleaned_data["multimedia_obj"]
+            create_tile(tile_title, tile_content_type, "", tile_multimedia_obj, request.user, column, board, team)
 
         elif request.POST.get("delete_tile"):
             tile_id = request.POST.get("delete_tile")

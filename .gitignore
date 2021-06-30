@@ -133,3 +133,7 @@ fabric.properties
 
 db.sqlite3
 kaboom_board/settings.py
+/media/
+/media/*
+media
+media/*

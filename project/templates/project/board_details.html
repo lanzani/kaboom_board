@@ -217,7 +217,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <form method="post" action="" name="add_new_mul_tile">
+                    <form method="post" action="" name="add_new_mul_tile" enctype="multipart/form-data">
                         {% csrf_token %}
 
                         <div class="modal-body">
@@ -238,36 +238,56 @@
         </div>
     {% endfor %}
 
-    <!-- contenuto text tile -->
-    <div class="modal" tabindex="-1" id="text-type-tile">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Titolo tile</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <a>Lorem ipsum</a>
 
+    <!-- Crea modal per tile -->
+    {% for tile in tiles %}
+        {% if tile.content != "" %}
+
+
+            <!-- Contenuto text tile -->
+            <div class="modal" tabindex="-1" id="text-type-tile-{{ tile.id }}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ tile.title }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <a>{{ tile.content }}</a>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- contenuto image tile -->
-    <div class="modal" tabindex="-1" id="image-type-tile">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Titolo tile</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <img src="img_girl.jpg">
+        {% else %}
+
+            <!-- Contenuto image tile -->
+            <div class="modal" tabindex="-1" id="image-type-tile-{{ tile.id }}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ tile.title }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <img class="img-thumbnail" src="/media/{{ tile.multimedia_obj }}"
+                                 alt="image-{{ tile.title }}">
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+
+        {% endif %}
+
+
+    {% endfor %}
+
+
+
+
 
     <!-- form modifica text tile -->
     <div class="modal" tabindex="-1" id="modifica-nometile-modal">
@@ -316,7 +336,7 @@
 
     <!-- Crea Colonne -->
     {% for column in columns %}
-        <ol class="kanban To-do">
+        <ol class="kanban To-do column-{{ column.id }}">
             <div class="kanban__title">
                 <h2>{{ column.title }}</h2>
 
@@ -353,9 +373,10 @@
 
             {% for tile in tiles %}
                 {% if tile.column_title == column %}
-                    {% if tile.content_type == "o" %}
+                    {% if tile.content != "" %}
 
-                        <li class="dd-item text" data-id="1" data-bs-toggle="modal" data-bs-target="#text-type-tile"
+                        <li class="dd-item text" data-id="1" data-bs-toggle="modal"
+                            data-bs-target="#text-type-tile-{{ tile.id }}"
                             style="background-color:palegreen;">
                             <h3 class="title dd-handle">{{ tile.title }}</h3>
 
@@ -387,10 +408,12 @@
                                 <p>fare click sul tile per visualizzarla nel dettaglio</p>
                             </div>
                         </li>
+
+
                     {% else %}
 
                         <li class="dd-item image" data-id="1" data-bs-toggle="modal"
-                            data-bs-target="#image-type-tile"
+                            data-bs-target="#image-type-tile-{{ tile.id }}"
                             style="background-color:powderblue;">
                             <h3 class="title dd-handle">{{ tile.title }}</h3>
                             <div class="row">
@@ -418,7 +441,6 @@
                                 <a>fare click sul tile per visualizzarla nel dettaglio</a>
                             </div>
                         </li>
-
 
 
                     {% endif %}
