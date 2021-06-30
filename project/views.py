@@ -2,7 +2,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from .models import Team, TeamMember, Board, Column, Tile
 from django.contrib.auth.models import User
-from .forms import CreateTeam, AddUserToTeam
+from .forms import CreateTeam, AddUserToTeam, CreateBoard
 from .crud_utils import *
 
 
@@ -46,7 +46,8 @@ def index(request):
 
 
 def team_details(request, team_name):
-    form = AddUserToTeam()
+    user_form = AddUserToTeam()
+    board_form = CreateBoard()
 
     # Qui è la pagina del team, vengono mostrati membri e boards
 
@@ -75,20 +76,14 @@ def team_details(request, team_name):
 
     if request.method == "POST":
         if request.POST.get("new_board"):
-            board_name = request.POST.get("board_name")
-            board_description = request.POST.get("board_description")
+            board_form = CreateTeam(request.POST)
 
-            board_already_exist = (
-                    len(Board.objects.filter(name=board_name, team_name=team)) > 0
-            )
+            if not board_form.is_valid():
+                return HttpResponseRedirect("/project/%s" % team.name)
 
-            if board_already_exist:
-                print(f"[INVALID] La board {board_name} esiste già")
-            elif 45 >= len(board_name) > 0 and len(board_description) <= 255:
-                b = Board(name=board_name, description=board_description, team_name=team)
-                b.save()
-            else:
-                print("[INVALID] Il nome può essere lungo max 45 caratteri e la descrizione max 255 caratteri")
+            board_name = board_form.cleaned_data["name"]
+            board_description = board_form.cleaned_data["description"]
+            create_board(board_name, board_description, team)
 
         elif request.POST.get("delete_board"):
             board_name = request.POST.get("delete_board")
@@ -98,13 +93,13 @@ def team_details(request, team_name):
             Team.objects.filter(name=team.name).delete()
 
         elif request.POST.get("add_user_to_team"):
-            form = AddUserToTeam(request.POST)
+            user_form = AddUserToTeam(request.POST)
 
-            if not form.is_valid():
+            if not user_form.is_valid():
                 return HttpResponseRedirect("/project/%s" % team.name)
 
-            username = form.cleaned_data["username"]
-            role = form.cleaned_data["role"]
+            username = user_form.cleaned_data["username"]
+            role = user_form.cleaned_data["role"]
 
             try:
                 u = User.objects.get(username=username)
@@ -133,18 +128,26 @@ def team_details(request, team_name):
         return HttpResponseRedirect("/project/%s" % team.name)
 
     return render(request, "project/team_details.html",
-                  {"team": team, "boards": boards, "members": members, "user_admin": user_admin, "form": form})
+                  {"team": team, "boards": boards, "members": members, "user_admin": user_admin, "user_form": user_form,
+                   "board_form": board_form})
 
 
 def board_details(request, team_name, board_name):
+
+
     try:
         team = Team.objects.get(pk=team_name)
     except Team.DoesNotExist:
         return HttpResponseRedirect("/project")
+
+    user_admin = TeamMember.objects.get(team_name=team, user_username=request.user)
+
     try:
         board = Board.objects.get(team_name=team, name=board_name)
     except Board.DoesNotExist:
         return HttpResponseRedirect("/project/%s" % team_name)
+
+    board_form = CreateBoard(initial={"name": board.name, "description":board.description})
 
     # Se l'utente corrente non è nel team selezionato reindirizza a pagina dei suoi team
     if not request.user.is_authenticated or not TeamMember.objects.filter(team_name=team,
@@ -162,7 +165,19 @@ def board_details(request, team_name, board_name):
 
     if request.method == "POST":
 
-        if request.POST.get("create_column"):
+        if request.POST.get("edit_board"):
+            board_form = CreateTeam(request.POST)
+
+            if not board_form.is_valid():
+                return HttpResponseRedirect(f"/project/{team_name}/{board_name}")
+
+            new_board_name = board_form.cleaned_data["name"]
+            new_board_description = board_form.cleaned_data["description"]
+            n = edit_board(board_name, new_board_name, new_board_description, team)
+
+            return HttpResponseRedirect(f"/project/{team_name}/{n}")
+
+        elif request.POST.get("create_column"):
             column_title = request.POST.get("column_title")
             create_column(column_title, board, team)
 
@@ -189,7 +204,8 @@ def board_details(request, team_name, board_name):
         return HttpResponseRedirect(f"/project/{team_name}/{board_name}")
 
     return render(request, "project/board_details.html",
-                  {"team": team, "board": board, "columns": columns, "tiles": tiles})
+                  {"team": team, "board": board, "columns": columns, "tiles": tiles, "board_form": board_form,
+                   "user_admin": user_admin})
 
 
 def view_profile(request):

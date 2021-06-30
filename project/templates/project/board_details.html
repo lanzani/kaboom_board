@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block style %}
     {% load static %}
@@ -30,7 +31,7 @@
         <a id="board-description">{{ board.description }}</a><br>
     </div>
 
-    <!-- form modifica nome board-->
+    <!-- form modifica nome board MODAL-->
     <div class="modal" tabindex="-1" id="modifica-nome-modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -38,16 +39,34 @@
                     <h5 class="modal-title">Modifica il nome della board</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <a>inserisci il nuovo nome </a>
-                    <input type="text" placeholder="Inserisci qui il nome" name="nomeBoard"> <br>
-                    <a>inserisci la nuova descrizione </a>
-                    <input type="text" placeholder="Inserisci qui la descrizione" name="nomeBoard">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                    <button type="button" class="btn btn-primary">Salva modifiche</button>
-                </div>
+
+
+                <form method="post" action="" name="edit_board">
+                    {% csrf_token %}
+
+
+                    <div class="modal-body">
+                        {{ board_form|crispy }}
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+
+                        {% if user_admin.role != "a" %}
+                            <span class="d-inline-block" tabindex="0" data-bs-toggle="popover"
+                                  data-bs-trigger="hover focus" data-bs-content="Devi essere un admin">
+                                    <button type="submit" class="btn btn-sucess" disabled>Modifica</button>
+                                </span>
+                        {% else %}
+                            <button type="submit" class="btn btn-success" name="edit_board" value="edit_board">Modifica
+                            </button>
+                        {% endif %}
+
+                    </div>
+                </form>
+
+
             </div>
         </div>
     </div>
@@ -374,7 +393,8 @@
 
                 <button class="btn btn-outline-success" data-bs-toggle="modal"
                         data-bs-target="#crea-tile-modal-{{ column.id }}">
-                    <em class="fas fa-plus-circle"> Crea tile</em></button>
+                    <em class="fas fa-plus-circle"></em> Crea tile
+                </button>
             </div>
         </ol>
     {% endfor %}

@@ -77,7 +77,7 @@
                             <div class="modal-body">
 
                                 {% csrf_token %}
-                                {{ form|crispy }}
+                                {{ user_form|crispy }}
 
                             </div>
                             <div class="modal-footer">
@@ -130,17 +130,16 @@
 
                         <form method="post" action="" name="create_board">
                             {% csrf_token %}
-                            <p>Nome Board</p>
-                            <input type="text" name="board_name" required>
-                            <p>Descrizione Board</p>
-                            <input type="text" name="board_description">
+
+                            {{ board_form|crispy }}
+
                             {% if user_admin.role != "a" %}
                                 <span class="d-inline-block" tabindex="0" data-bs-toggle="popover"
                                       data-bs-trigger="hover focus" data-bs-content="Devi essere un admin">
-                                    <button type="submit" class="btn btn-primary" disabled>Crea</button>
+                                    <button type="submit" class="btn btn-sucess" disabled>Crea</button>
                                 </span>
                             {% else %}
-                                <button type="submit" class="btn btn-primary" name="new_board" value="new_board">Crea
+                                <button type="submit" class="btn btn-success" name="new_board" value="new_board">Crea
                                 </button>
                             {% endif %}
                         </form>

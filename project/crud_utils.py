@@ -2,9 +2,43 @@ from datetime import date
 
 from .models import Team, TeamMember, Board, Column, Tile
 
+
 # TODO Team
 
-# TODO Board
+# Board
+def create_board(name, description, team):
+    board_already_exist = (
+            len(Board.objects.filter(name=name, team_name=team)) > 0
+    )
+
+    if board_already_exist:
+        print("La board è già nel team")
+    else:
+        b = Board(name=name, description=description, team_name=team)
+        b.save()
+
+
+def edit_board(old_name, new_name, new_description, team):
+    board_already_exist = False
+
+    if old_name != new_name:
+        board_already_exist = (
+                len(Board.objects.filter(name=new_name, team_name=team)) > 0
+        )
+
+    if board_already_exist:
+        print("La board è già nel team")
+        return old_name
+    else:
+        b = Board.objects.get(name=old_name, team_name=team)
+
+        b.name = new_name
+        b.description = new_description
+
+        b.save()
+        return new_name
+
+
 
 
 # Column
@@ -40,7 +74,6 @@ def change_column_status(column_id, status):
 # Tile
 
 def create_tile(title, content_type, content, multimedia_obj, author, column, board, team):
-
     t = Tile(title=title, content_type=content_type, content=content, multimedia_obj=multimedia_obj,
              creation_date=date.today(), author=author, column_title=column, team_name=team, board_name=board)
 
@@ -49,3 +82,5 @@ def create_tile(title, content_type, content, multimedia_obj, author, column, bo
 
 def delete_tile(tile_id):
     Tile.objects.get(pk=tile_id).delete()
+
+# TODO User

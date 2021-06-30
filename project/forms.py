@@ -27,3 +27,6 @@ class AddUserToTeam(forms.Form):
     role = forms.ChoiceField(label='Ruolo', choices=ROLE_OPTIONS, widget=forms.RadioSelect)
 
 
+class CreateBoard(forms.Form):
+    name = forms.CharField(label="Nome", max_length=45)
+    description = forms.CharField(label="Descrizione", max_length=255, required=False)
