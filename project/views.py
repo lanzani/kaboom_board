@@ -19,6 +19,7 @@ def index(request):
     form = CreateTeam()
 
     if request.method == "POST":
+
         form = CreateTeam(request.POST)
         if not form.is_valid():
             return HttpResponseRedirect("/project/")
@@ -266,6 +267,13 @@ def board_details(request, team_name, board_name):
         elif request.POST.get("delete_tile"):
             tile_id = request.POST.get("delete_tile")
             delete_tile(tile_id)
+
+        elif request.POST.get("move_tile"):
+            tile_id = request.POST.get("tile_id")
+            column_id = request.POST.get("column_id")
+            column = Column.objects.get(pk=column_id)
+            move_tile(tile_id, column)
+
 
         return HttpResponseRedirect(f"/project/{team_name}/{board_name}")
 

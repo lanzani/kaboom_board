@@ -125,6 +125,10 @@ def edit_mul_tile(tile_id, title, multimedia_obj, content_type):
 
     t.save()
 
+def move_tile(tile_id, column):
+    t = Tile.objects.get(pk=tile_id)
+    t.column_title = column
+    t.save()
 
 def delete_tile(tile_id):
     Tile.objects.get(pk=tile_id).delete()

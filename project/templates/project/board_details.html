@@ -314,7 +314,8 @@
 
                 <div class="row">
                     <div class="col-md-3">
-                        <form method="post" action="" name="change_column_status_archived" enctype="multipart/form-data">
+                        <form method="post" action="" name="change_column_status_archived"
+                              enctype="multipart/form-data">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-info" name="change_column_status_archived"
                                     value="{{ column.id }}">
@@ -342,89 +343,91 @@
 
             </div>
             <br>
+            <div class="" id="{{ column.id }}">
 
-            {% for tile in tiles %}
-                {% if tile.column_title == column %}
+                <ul id="sortable1" class="connectedSortable ul_draggable" name="{{ column.id }}">
+                    {% for tile in tiles %}
+                        {% if tile.column_title == column %}
 
-                    <!-- TILE TESTO -->
-                    <ul id="sortable1" class="connectedSortable">
-                        {% if tile.content != "" %}
+                            <!-- TILE TESTO -->
+                            {% if tile.content != "" %}
 
-                            <li class="dd-item text" data-id="1" data-bs-toggle="modal"
-                                data-bs-target="#text-type-tile-{{ tile.id }}"
-                                    {% if tile.content_type == "o" %} style="background-color:palegreen;" {% else %}
-                                style="background-color:powderblue;" {% endif %}>
-
-
-                                <h3 class="title dd-handle">{{ tile.title }}</h3>
+                                <li class="dd-item text ui-state-default li_draggable" id="{{ tile.id }}" data-id="1"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#text-type-tile-{{ tile.id }}"
+                                        {% if tile.content_type == "o" %} style="background-color:palegreen;" {% else %}
+                                    style="background-color:powderblue;" {% endif %}>
 
 
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <button class="btn btn-secondary" data-bs-toggle="modal"
-                                                data-bs-target="#modifica-{{ tile.id }}-modal">
-                                            <em class="fas fa-pencil-alt" style="color: white"></em>
-                                        </button>
-                                    </div>
+                                    <h3 class="title dd-handle">{{ tile.title }}</h3>
 
-                                    <div class="col-md-3">
-                                        <form method="post" action="" name="delete_tile">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-danger" name="delete_tile"
-                                                    value="{{ tile.id }}">
-                                                <em class="fas fa-trash" style="color: white"></em>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <button class="btn btn-secondary" data-bs-toggle="modal"
+                                                    data-bs-target="#modifica-{{ tile.id }}-modal">
+                                                <em class="fas fa-pencil-alt" style="color: white"></em>
                                             </button>
-                                        </form>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <form method="post" action="" name="delete_tile">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger" name="delete_tile"
+                                                        value="{{ tile.id }}">
+                                                    <em class="fas fa-trash" style="color: white"></em>
+                                                </button>
+                                            </form>
+                                        </div>
+
                                     </div>
 
-                                </div>
-
-                                <br>
-                                <div class="actions">
-                                    <p>fare click sul tile per visualizzarla nel dettaglio</p>
-                                </div>
-                            </li>
-
-
-                            <!-- TILE IMMAGINE -->
-                        {% else %}
-
-                            <li class="dd-item image" data-id="1" data-bs-toggle="modal"
-                                data-bs-target="#image-type-tile-{{ tile.id }}"
-                                    {% if tile.content_type == "o" %} style="background-color:palegreen;" {% else %}
-                                style="background-color:powderblue;" {% endif %}>
-                                <h3 class="title dd-handle">{{ tile.title }}</h3>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <button class="btn btn-secondary" data-bs-toggle="modal"
-                                                data-bs-target="#modifica-{{ tile.id }}-modal">
-                                            <em class="fas fa-pencil-alt" style="color: white"></em>
-                                        </button>
+                                    <br>
+                                    <div class="actions">
+                                        <p>fare click sul tile per visualizzarla nel dettaglio</p>
                                     </div>
+                                </li>
 
-                                    <div class="col-md-3">
-                                        <form method="post" action="" name="delete_tile">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-danger" name="delete_tile"
-                                                    value="{{ tile.id }}">
-                                                <em class="fas fa-trash" style="color: white"></em>
+
+                                <!-- TILE IMMAGINE -->
+                            {% else %}
+
+                                <li class="dd-item image ui-state-default li_draggable" id="{{ tile.id }}" data-id="1"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#image-type-tile-{{ tile.id }}"
+                                        {% if tile.content_type == "o" %} style="background-color:palegreen;" {% else %}
+                                    style="background-color:powderblue;" {% endif %}>
+                                    <h3 class="title dd-handle">{{ tile.title }}</h3>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <button class="btn btn-secondary" data-bs-toggle="modal"
+                                                    data-bs-target="#modifica-{{ tile.id }}-modal">
+                                                <em class="fas fa-pencil-alt" style="color: white"></em>
                                             </button>
-                                        </form>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <form method="post" action="" name="delete_tile">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger" name="delete_tile"
+                                                        value="{{ tile.id }}">
+                                                    <em class="fas fa-trash" style="color: white"></em>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
-                                </div>
-                                <br>
-                                <div class="actions">
-                                    <p>fare click sul tile per visualizzarla nel dettaglio</p>
-                                </div>
-                            </li>
+                                    <br>
+                                    <div class="actions">
+                                        <p>fare click sul tile per visualizzarla nel dettaglio</p>
+                                    </div>
+                                </li>
+
+                            {% endif %}
 
                         {% endif %}
-                    </ul>
-
-                {% endif %}
-            {% endfor %}
-
-
+                    {% endfor %}
+                </ul>
+            </div>
 
 
             <div class="actions">
