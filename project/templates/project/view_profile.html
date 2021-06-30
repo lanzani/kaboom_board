@@ -7,9 +7,9 @@
     <div class="centro">
         <div class="d-flex align-items-center"><i class="fas fa-user fa-5x" id="icon-utente"></i>
             <h1 class="nome-user"> {{ user.username }}</h1></div>
-        <div><a>Nome: <a class="nome-utente"> il suo nome</a></a><br>
-            <a>cognome: <a class="cognome-utente"> il suo cognome</a></a><br>
-            <a>email: <a class="mail-utente"> la sua mail</a></a>
+        <div><a>Nome: <a class="nome-utente"> {{user.first_name}}</a></a><br>
+            <a>cognome: <a class="cognome-utente"> {{user.last_name}}</a></a><br>
+            <a>email: <a class="mail-utente">{{user.email}}</a></a>
         </div>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifica-user-modal">
             Modifica user
