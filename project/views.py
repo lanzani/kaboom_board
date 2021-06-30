@@ -2,7 +2,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from .models import Team, TeamMember, Board, Column, Tile
 from django.contrib.auth.models import User
-from .forms import CreateTeam, AddUserToTeam, CreateBoard, CreateTileText, CreateTileMul, CreateColumn
+from .forms import CreateTeam, AddUserToTeam, CreateBoard, CreateTileText, CreateTileMul, CreateColumn, UserUpdateForm
 from .crud_utils import *
 
 
@@ -290,7 +290,19 @@ def board_details(request, team_name, board_name):
 
 
 def view_profile(request):
-    return render(request, "project/view_profile.html", {})
+    user_form = UserUpdateForm(instance=request.user)
+    if request.method == "POST":
+        if request.POST.get("edit_user"):
+            user_form = UserUpdateForm(request.POST, instance=request.user)
+            if user_form.is_valid():
+                user_form.save()
+                return HttpResponseRedirect(f"/project/view_profile")
+        elif request.POST.get("delete_user"):
+            user_username = request.POST.get("delete_user")
+            User.objects.get(username=user_username).delete()
+            return HttpResponseRedirect(f"/")
+
+    return render(request, "project/view_profile.html", {"user_form": user_form})
 
 
 def view_board_archive(request, team_name, board_name):

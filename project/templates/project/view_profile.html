@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
+
 {% block style %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'project/css/profileStyle.css' %}">
@@ -7,13 +9,19 @@
     <div class="centro">
         <div class="d-flex align-items-center"><i class="fas fa-user fa-5x" id="icon-utente"></i>
             <h1 class="nome-user"> {{ user.username }}</h1></div>
-        <div><a>Nome: <a class="nome-utente"> {{user.first_name}}</a></a><br>
-            <a>cognome: <a class="cognome-utente"> {{user.last_name}}</a></a><br>
-            <a>email: <a class="mail-utente">{{user.email}}</a></a>
+        <div><a>Nome: <a class="nome-utente"> {{ user.first_name }}</a></a><br>
+            <a>cognome: <a class="cognome-utente"> {{ user.last_name }}</a></a><br>
+            <a>email: <a class="mail-utente">{{ user.email }}</a></a>
         </div>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modifica-user-modal">
             Modifica user
         </button>
+
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#elimina-user-modal">
+            Elimina user
+        </button>
+
+
 
     </div>
 
@@ -23,21 +31,51 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modifica il nome della board</h5>
+                    <h5 class="modal-title">Modifica utente</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <a>inserisci il nuovo nome </a>
-                    <input type="text" placeholder="Inserisci qui il nome" name="nomeBoard"> <br>
-                    <a>inserisci il nuovo cognome </a>
-                    <input type="text" placeholder="Inserisci qui il cognome" name="nomeBoard"> <br>
-                    <a>inserisci la nuova mail </a>
-                    <input type="text" placeholder="Inserisci qui la mail" name="nomeBoard">
+                <form method="post" action="" name="edit_user">
+                    <div class="modal-body">
+
+                        {% csrf_token %}
+                        {{ user_form|crispy }}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" name="edit_user"
+                                value="{{ user.username }}">Modifica
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!--form elimina utente-->
+
+    <div class="modal" tabindex="-1" id="elimina-user-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Elimina utente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                    <button type="button" class="btn btn-primary">Salva modifiche</button>
-                </div>
+                <form method="post" action="" name="delete_user">
+                    <div class="modal-body">
+
+                        {% csrf_token %}
+                        Sei sicuro di voler eliminare l'utente?
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger" name="delete_user"
+                                value="{{ user.username }}">ELIMINA UTENTE
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

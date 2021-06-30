@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.models import User
+
 from .models import Tile
 
 
@@ -50,3 +52,9 @@ class CreateBoard(forms.Form):
 
 class CreateColumn(forms.Form):
     title = forms.CharField(label="Titolo", max_length=45)
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email', "first_name", "last_name"]
