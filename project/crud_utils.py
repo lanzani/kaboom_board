@@ -96,7 +96,7 @@ def create_tile(title, content_type, content, multimedia_obj, author, column, bo
     t.save()
 
 
-def edit_txt_tile(tile_id, title, content, content_type):
+def edit_txt_tile(tile_id, title, content, content_type, author):
     t = Tile.objects.get(pk=tile_id)
 
     if title != "":
@@ -108,10 +108,13 @@ def edit_txt_tile(tile_id, title, content, content_type):
     if content != "":
         t.content = content
 
+    if author != "":
+        t.author = author
+
     t.save()
 
 
-def edit_mul_tile(tile_id, title, multimedia_obj, content_type):
+def edit_mul_tile(tile_id, title, multimedia_obj, content_type, author):
     t = Tile.objects.get(pk=tile_id)
 
     if title != "":
@@ -122,6 +125,9 @@ def edit_mul_tile(tile_id, title, multimedia_obj, content_type):
 
     if multimedia_obj != "":
         t.multimedia_obj = multimedia_obj
+
+    if author != "":
+        t.author = author
 
     t.save()
 
