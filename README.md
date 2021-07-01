@@ -4,7 +4,6 @@
 ---
 
 Semplice realizzazione di una kanban board.
-Sviluppata per il lavoro di team.
 
 
 Ogni utente può creare o partecipare a più team dei quali può essere membro o amministratore, questi ultimi potranno 
