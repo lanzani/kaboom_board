@@ -23,15 +23,15 @@
         <h1>{{ board.name }}</h1>
 
         <div class="btn-group" role="group">
-            <a class="btn btn-primary" href="{% url 'project:view_board_archive' team.name board.name %}">Vai
+            <a class="btn btn-primary" href="{% url 'project:view_board_archive' team.name board.name %}" id="intestazione">Vai
                 all'archivio</a>
             <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
-                    data-bs-target="#modifica-nome-modal">
+                    data-bs-target="#modifica-nome-modal" id="intestazione">
                 Modifica Board
             </button>
 
             <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                    data-bs-target="#Aggiungi-colonna-modal">
+                    data-bs-target="#Aggiungi-colonna-modal" id="intestazione">
                 <em class="fas fa-plus" id="btn-add"></em> Aggiungi Colonna
             </button>
         </div>
