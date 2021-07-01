@@ -18,16 +18,13 @@
     <h1>{{ team.name }}</h1>
     <p>{{ team.description }}</p>
 
-    {% if user_admin.role == "a" %}
-        <form method="post" action="" name="delete_team">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-danger btn-sm" name="delete_team" value="delete_team">Delete
-                Team
-            </button>
-        </form>
-    {% endif %}
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            id="btn-adduser">
+        Aggiungi utente
+    </button>
 
-    <table cellpadding="2" cellspacing="0" border="0">
+    <table cellpadding="4" cellspacing="0" border="0">
 
 
         {% for member in members %}
@@ -40,24 +37,28 @@
                                         class="user-list-text"> (admin) - {{ member.user_username }}</span></a>
 
                                 {% if user_admin.role == "a" %}
-                                <td>
-                                    <form method="post" action="" name="remove_user_from_team">
-                                        {% csrf_token %}
+                                    {% if  user_admin.user_username == user.username %}
+                                        <td>
+                                            <form method="post" action="" name="remove_user_from_team">
+                                                {% csrf_token %}
 
-                                        <button type="submit" class="btn btn-warning" name="remove_user_from_team"
-                                                value="{{ member.user_username }}">Rimuovi
-                                        </button>
-                                    </form>
-                                </td>
+                                                <button type="submit" class="btn btn-warning"
+                                                        name="remove_user_from_team"
+                                                        value="{{ member.user_username }}">Rimuovi
+                                                </button>
+                                            </form>
+                                        </td>
+                                    {% endif %}
                                 {% endif %}
-                            </li>
+                        </li>
                         </td>
                     </tr>
                 {% else %}
                     <tr>
                         <td>
                             <li class="user-list-item">
-                                <a class="user-list" id="user-list"><i class="fas fa-user"></i>{{ member.user_username }}
+                                <a class="user-list" id="user-list"><i
+                                        class="fas fa-user"></i>{{ member.user_username }}
                                 </a>
 
                                 {% if user_admin.role == "a" %}
@@ -71,7 +72,7 @@
                                         </form>
                                     </td>
                                 {% endif %}
-                            </li>
+                        </li>
                         </td>
                     </tr>
                 {% endif %}
@@ -79,40 +80,64 @@
 
         {% endfor %}
 
+        <tr>
+            <td>
+                <form method="post" action="" name="leave_team">
+
+                    {% csrf_token %}
+
+                    <button type="submit" class="btn btn-warning btn-sm" name="leave_team"
+                            value="{{ team.name }}">Lascia Team
+                    </button>
+                </form>
+            </td>
+            <td>
+                {% if user_admin.role == "a" %}
+                    <form method="post" action="" name="delete_team">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm" name="delete_team"
+                                value="delete_team">Delete
+                            Team
+                        </button>
+                    </form>
+                {% endif %}
+
+            </td>
+        </tr>
+
     </table>
 
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="btn-adduser">
-            Aggiungi utente
-        </button>
 
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Aggiungi utente</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form method="post" action="" name="add_user_to_team">
-                        <div class="modal-body">
 
-                            {% csrf_token %}
-                            {{ user_form|crispy }}
 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success" name="add_user_to_team"
-                                    value="{{ team.name }}">Aggiungi
-                            </button>
-                        </div>
-                    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Aggiungi utente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form method="post" action="" name="add_user_to_team">
+                    <div class="modal-body">
+
+                        {% csrf_token %}
+                        {{ user_form|crispy }}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" name="add_user_to_team"
+                                value="{{ team.name }}">Aggiungi
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
     <br>
     <div class="row row-cols-1 row-cols-md-3 g-4">

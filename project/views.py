@@ -127,6 +127,11 @@ def team_details(request, team_name):
             if user != request.user:
                 TeamMember.objects.filter(user_username=user, team_name=team).delete()
 
+        elif request.POST.get("leave_team"):
+            team_to_leave = Team.objects.get(name=request.POST.get("leave_team"))
+
+            TeamMember.objects.get(user_username=request.user, team_name=team_to_leave).delete()
+
         return HttpResponseRedirect("/project/%s" % team.name)
 
     return render(request, "project/team_details.html",
